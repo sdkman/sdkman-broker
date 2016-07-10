@@ -48,6 +48,7 @@ docker {
 }
 
 task buildAppImage(type: DockerBuildImage) {
+  dependsOn shadowJar
   inputDir = file('.')
   tag = 'sdkman/sdkman-broker'
 }
@@ -69,11 +70,16 @@ task stopAppContainer(type: DockerStopContainer) {
   targetContainerId { createAppContainer.containerId }
 }
 
+task removeAppContainer(type: DockerRemoveContainer) {
+  dependsOn stopAppContainer
+  targetContainerId { createAppContainer.containerId }
+}
+
 task funtest(type: Test) {
   testClassesDir = sourceSets.funtest.output.classesDir
   classpath = sourceSets.funtest.runtimeClasspath
   dependsOn startAppContainer
-  finalizedBy stopAppContainer
+  finalizedBy removeAppContainer
 }
 
 check.dependsOn funtest
