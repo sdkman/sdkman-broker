@@ -43,12 +43,14 @@ sourceSets {
   }
 }
 
+assemble.dependsOn shadowJar
+
 docker {
   url = "unix:///var/run/docker.sock"
 }
 
 task buildAppImage(type: DockerBuildImage) {
-  dependsOn shadowJar
+  dependsOn assemble
   inputDir = file('.')
   tag = 'sdkman/sdkman-broker'
 }
