@@ -27,7 +27,7 @@ repositories {
 
 dependencies {
   runtime 'org.slf4j:slf4j-simple:1.7.12'
-  compile 'com.google.inject:guice:3.0'
+  compile ratpack.dependency("guice")
   testCompile 'org.codehaus.groovy:groovy-all:2.4.7'
   testCompile "org.spockframework:spock-core:1.0-groovy-2.4"
   testCompile 'info.cukes:cucumber-junit:1.1.8'
