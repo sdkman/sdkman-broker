@@ -1,5 +1,8 @@
-import com.bmuschko.gradle.docker.tasks.container.*
-import com.bmuschko.gradle.docker.tasks.image.*
+import com.bmuschko.gradle.docker.tasks.container.DockerCreateContainer
+import com.bmuschko.gradle.docker.tasks.container.DockerRemoveContainer
+import com.bmuschko.gradle.docker.tasks.container.DockerStartContainer
+import com.bmuschko.gradle.docker.tasks.container.DockerStopContainer
+import com.bmuschko.gradle.docker.tasks.image.DockerBuildImage
 
 buildscript {
   repositories {
@@ -12,10 +15,11 @@ buildscript {
   }
 }
 
-apply plugin: "io.ratpack.ratpack-groovy"
+apply plugin: "io.ratpack.ratpack-java"
 apply plugin: "com.github.johnrengelman.shadow"
 apply plugin: "com.bmuschko.docker-remote-api"
 apply plugin: "idea"
+apply plugin: "groovy"
 
 repositories {
   jcenter()
@@ -23,11 +27,15 @@ repositories {
 
 dependencies {
   runtime 'org.slf4j:slf4j-simple:1.7.12'
+  compile 'com.google.inject:guice:3.0'
+  testCompile 'org.codehaus.groovy:groovy-all:2.4.7'
   testCompile "org.spockframework:spock-core:1.0-groovy-2.4"
   testCompile 'info.cukes:cucumber-junit:1.1.8'
   testCompile 'info.cukes:cucumber-groovy:1.1.8'
   testCompile 'com.github.groovy-wslite:groovy-wslite:0.8.0'
 }
+
+mainClassName = "io.sdkman.broker.Main"
 
 configurations {
   funTestCompile.extendsFrom testCompile
