@@ -9,8 +9,7 @@ public class Main {
     public static void main(String[] args) throws Exception {
         RatpackServer.start(spec -> spec
                 .registry(Guice.registry(g -> g
-                        .bind(MongoConnectionProvider.class)
-                        .bind(DownloadRepo.class)
+                        .bind(MongoProvider.class)
                         .bind(HealthRepo.class)))
                 .handlers(chain -> chain
                         .get("alive", ctx -> {
