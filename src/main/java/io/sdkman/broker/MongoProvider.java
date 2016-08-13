@@ -1,5 +1,6 @@
 package io.sdkman.broker;
 
+import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoCredential;
@@ -12,20 +13,24 @@ import java.util.List;
 @Singleton
 class MongoProvider {
 
-    private final String mongoHost = "mongo";
-    private final int mongoPort = 27017;
-    private final String mongoUsername = null;
-    private final String mongoPassword = null;
-    private final String mongoDbName = "sdkman";
+    private final MongoConfig mongoConfig;
+
+    @Inject
+    public MongoProvider(MongoConfig mongoConfig) {
+        this.mongoConfig = mongoConfig;
+    }
 
     public MongoDatabase database() throws Exception {
-        return mongo().getDatabase(mongoDbName);
+        return mongo().getDatabase(mongoConfig.getMongoDbName());
     }
 
     private MongoClient mongo() throws Exception {
-        ServerAddress serverAddress = new ServerAddress(mongoHost, mongoPort);
-        if (mongoUsername != null && mongoPassword != null) {
-            MongoCredential credential = MongoCredential.createCredential(mongoUsername, mongoDbName, mongoPassword.toCharArray());
+        ServerAddress serverAddress = new ServerAddress(mongoConfig.getMongoHost(), mongoConfig.getMongoPort());
+        if (mongoConfig.getMongoUsername() != null && mongoConfig.getMongoPassword() != null) {
+            MongoCredential credential = MongoCredential.createCredential(
+                    mongoConfig.getMongoUsername(),
+                    mongoConfig.getMongoDbName(),
+                    mongoConfig.getMongoPassword().toCharArray());
             List credentials = new ArrayList() {{
                 add(credential);
             }};

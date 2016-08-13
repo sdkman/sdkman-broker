@@ -8,6 +8,10 @@ import static ratpack.jackson.Jackson.json;
 public class Main {
     public static void main(String[] args) throws Exception {
         RatpackServer.start(spec -> spec
+                .serverConfig(c -> c
+                        .env()
+                        .require("/db", MongoConfig.class)
+                )
                 .registry(Guice.registry(g -> g
                         .bind(MongoProvider.class)
                         .bind(HealthRepo.class)))
