@@ -10,7 +10,7 @@ public class Main {
         RatpackServer.start(spec -> spec
                 .serverConfig(c -> c
                         .env()
-                        .require("/db", MongoConfig.class)
+                        .require("/mongo", MongoConfig.class)
                 )
                 .registry(Guice.registry(g -> g
                         .bind(MongoProvider.class)

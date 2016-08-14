@@ -21,16 +21,16 @@ class MongoProvider {
     }
 
     public MongoDatabase database() throws Exception {
-        return mongo().getDatabase(mongoConfig.getMongoDbName());
+        return mongo().getDatabase(mongoConfig.getDbName());
     }
 
     private MongoClient mongo() throws Exception {
-        ServerAddress serverAddress = new ServerAddress(mongoConfig.getMongoHost(), mongoConfig.getMongoPort());
-        if (mongoConfig.getMongoUsername() != null && mongoConfig.getMongoPassword() != null) {
+        ServerAddress serverAddress = new ServerAddress(mongoConfig.getHost(), mongoConfig.getPort());
+        if (mongoConfig.getUsername() != null && mongoConfig.getPassword() != null) {
             MongoCredential credential = MongoCredential.createCredential(
-                    mongoConfig.getMongoUsername(),
-                    mongoConfig.getMongoDbName(),
-                    mongoConfig.getMongoPassword().toCharArray());
+                    mongoConfig.getUsername(),
+                    mongoConfig.getDbName(),
+                    mongoConfig.getPassword().toCharArray());
             List credentials = new ArrayList() {{
                 add(credential);
             }};

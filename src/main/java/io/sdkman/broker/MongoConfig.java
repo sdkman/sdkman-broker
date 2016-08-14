@@ -1,29 +1,29 @@
 package io.sdkman.broker;
 
 public class MongoConfig {
-    private String mongoHost = "mongo";
-    private int mongoPort = 27017;
-    private String mongoUsername = null;
-    private String mongoPassword = null;
-    private String mongoDbName = "sdkman";
+    private String host = "mongo";
+    private int port = 27017;
+    private String username = null;
+    private String password = null;
+    private String dbName = "sdkman";
 
-    public String getMongoHost() {
-        return mongoHost;
+    public String getHost() {
+        return host;
     }
 
-    public int getMongoPort() {
-        return mongoPort;
+    public int getPort() {
+        return port;
     }
 
-    public String getMongoUsername() {
-        return mongoUsername;
+    public String getUsername() {
+        return username;
     }
 
-    public String getMongoPassword() {
-        return mongoPassword;
+    public String getPassword() {
+        return password;
     }
 
-    public String getMongoDbName() {
-        return mongoDbName;
+    public String getDbName() {
+        return dbName;
     }
 }
