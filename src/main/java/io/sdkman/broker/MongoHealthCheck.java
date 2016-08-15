@@ -39,7 +39,7 @@ class MongoHealthCheck implements HealthCheck {
         return Blocking.get(() -> {
             MongoCollection<Document> collection = mongo.getCollection(COLLECTION_NAME);
             return Optional.ofNullable(collection.find(eq(FIELD_NAME, FIELD_VALUE)).first())
-                    .filter(first -> first.getString(FIELD_NAME).equals(FIELD_VALUE))
+                    .filter(first -> FIELD_VALUE.equals(first.getString(FIELD_NAME)))
                     .map(r -> HealthCheck.Result.healthy())
                     .orElse(HealthCheck.Result.unhealthy(UNHEALTHY_MESSAGE));
         });
