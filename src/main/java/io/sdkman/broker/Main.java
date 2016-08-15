@@ -18,7 +18,8 @@ public class Main {
                 .handlers(chain -> chain
                         .get("alive", ctx -> {
                             HealthRepo healthRepo = ctx.get(HealthRepo.class);
-                            ctx.render(json(healthRepo.isAlive()));
+                            healthRepo.isAlive().then(healthResponse ->
+                                    ctx.render(json(healthResponse)));
                         })));
     }
 }
