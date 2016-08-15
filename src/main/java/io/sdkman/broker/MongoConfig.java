@@ -6,6 +6,9 @@ public class MongoConfig {
     private String username = null;
     private String password = null;
     private String dbName = "sdkman";
+    private int serverSelectionTimeout = 1000 * 5;
+    private int connectionTimeout = 1000 * 5;
+    private int socketTimeout = 0;
 
     public String getHost() {
         return host;
@@ -25,5 +28,17 @@ public class MongoConfig {
 
     public String getDbName() {
         return dbName;
+    }
+
+    public int getServerSelectionTimeout() {
+        return serverSelectionTimeout;
+    }
+
+    public int getConnectionTimeout() {
+        return connectionTimeout;
+    }
+
+    public int getSocketTimeout() {
+        return socketTimeout;
     }
 }
