@@ -15,17 +15,15 @@ import java.util.List;
 class MongoProvider {
 
     private final MongoConfig mongoConfig;
+    private final MongoClient mongoClient;
 
     @Inject
     public MongoProvider(MongoConfig mongoConfig) {
         this.mongoConfig = mongoConfig;
+        this.mongoClient = mongo();
     }
 
-    public MongoDatabase database() throws Exception {
-        return mongo().getDatabase(mongoConfig.getDbName());
-    }
-
-    private MongoClient mongo() throws Exception {
+    private MongoClient mongo() {
         ServerAddress serverAddress = new ServerAddress(mongoConfig.getHost(), mongoConfig.getPort());
         MongoClientOptions clientOptions = MongoClientOptions.builder()
                 .serverSelectionTimeout(mongoConfig.getServerSelectionTimeout())
@@ -45,5 +43,9 @@ class MongoProvider {
         } else {
             return new MongoClient(serverAddress, clientOptions);
         }
+    }
+
+    public MongoDatabase database() throws Exception {
+        return mongoClient.getDatabase(mongoConfig.getDbName());
     }
 }
