@@ -4,13 +4,18 @@ services:
 language: java
 before_install:
   - docker login -e="$DOCKER_EMAIL" -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
-  - docker run -d -p 27017:27017 mongo:latest
+  - docker run -d --net=host mongo:latest
 script:
-  - docker build -t sdkman/sdkman-broadcast:latest .
-  - docker run -d -p 9001:9001 --net=host sdkman/sdkman-broadcast:latest
-  - "./gradlew check"
+  - docker build -t sdkman/sdkman-broker:1.0.0-SNAPSHOT .
+  - docker run -d --env="RATPACK_MONGO__HOST=localhost" --net=host sdkman/sdkman-broker:1.0.0-SNAPSHOT
+  - "./gradlew check --stacktrace"
 after_success:
-  - docker push sdkman/sdkman-broker:latest
+  - docker push sdkman/sdkman-broker:1.0.0-SNAPSHOT
 cache:
   directories:
   - "$HOME/.gradle"
+# blacklist
+branches:
+  except:
+    - RELEASE
+
