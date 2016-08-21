@@ -7,12 +7,16 @@ import com.mongodb.MongoClientOptions;
 import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
 import com.mongodb.client.MongoDatabase;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Singleton
 class MongoProvider {
+
+    private final static Logger LOG = LoggerFactory.getLogger(MongoProvider.class);
 
     private final MongoConfig mongoConfig;
     private final MongoClient mongoClient;
@@ -24,6 +28,7 @@ class MongoProvider {
     }
 
     private MongoClient mongo() {
+        LOG.info("Initialising mongo client.");
         ServerAddress serverAddress = new ServerAddress(mongoConfig.getHost(), mongoConfig.getPort());
         MongoClientOptions clientOptions = MongoClientOptions.builder()
                 .serverSelectionTimeout(mongoConfig.getServerSelectionTimeout())
