@@ -2,16 +2,13 @@ sudo: required
 services:
   - docker
 language: java
-env:
-  global:
-    - DOCKER_VERSION=1.11.2-0~trusty
 before_install:
-  - sudo apt-get remove --purge docker-engine
-  - sudo apt-get install docker-engine=${DOCKER_VERSION}
-  - docker version
   - docker login -e="$DOCKER_EMAIL" -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
+  - docker run -d -p 27017:27017 mongo:latest
 script:
-  - "./gradlew check --stacktrace"
+  - docker build -t sdkman/sdkman-broadcast:latest .
+  - docker run -d -p 9001:9001 --net=host sdkman/sdkman-broadcast:latest
+  - "./gradlew check"
 after_success:
   - docker push sdkman/sdkman-broker:latest
 cache:
