@@ -12,9 +12,8 @@ public class Main {
                         .require("/mongo", MongoConfig.class))
                 .registry(Guice.registry(g -> g
                         .bind(MongoProvider.class)
-                        .bind(MongoHealthCheck.class)
-                        .bind(HealthCheckHandler.class)))
+                        .bind(MongoHealthCheck.class)))
                 .handlers(chain -> chain
-                        .get("health/:name?", HealthCheckHandler.class)));
+                        .get("health/:name?", new HealthCheckHandler())));
     }
 }
