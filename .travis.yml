@@ -13,7 +13,7 @@ before_install:
 script:
   - "./gradlew check --stacktrace"
 after_success:
-  - docker push sdkman/sdkman-broker:latest
+  - docker push sdkman/sdkman-broker:1.0.0-SNAPSHOT
 cache:
   directories:
   - "$HOME/.gradle"

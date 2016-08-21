@@ -86,7 +86,7 @@ task removeDbContainer(type: DockerRemoveContainer) {
 task buildAppImage(type: DockerBuildImage) {
   dependsOn assemble
   inputDir = file(".")
-  tag = "sdkman/sdkman-broker:latest"
+  tag = "sdkman/sdkman-broker:${version}"
 }
 
 task createAppContainer(type: DockerCreateContainer) {
