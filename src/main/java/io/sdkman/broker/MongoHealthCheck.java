@@ -5,6 +5,8 @@ import com.google.inject.Singleton;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ratpack.exec.Blocking;
 import ratpack.exec.Promise;
 import ratpack.health.HealthCheck;
@@ -16,10 +18,13 @@ import static com.mongodb.client.model.Filters.eq;
 
 @Singleton
 class MongoHealthCheck implements HealthCheck {
-    private static final String COLLECTION_NAME = "application";
-    private static final String FIELD_NAME = "alive";
-    private static final String FIELD_VALUE = "OK";
-    private static final String UNHEALTHY_MESSAGE = "null value returned from application/alive in mongodb.";
+
+    private final static Logger LOG = LoggerFactory.getLogger(MongoHealthCheck.class);
+
+    public static final String COLLECTION_NAME = "application";
+    public static final String FIELD_NAME = "alive";
+    public static final String FIELD_VALUE = "OK";
+    public static final String UNHEALTHY_MESSAGE = "Nothing found at application/alive in database.";
 
     private final MongoProvider mongoProvider;
 
@@ -40,8 +45,18 @@ class MongoHealthCheck implements HealthCheck {
             MongoCollection<Document> collection = mongo.getCollection(COLLECTION_NAME);
             return Optional.ofNullable(collection.find(eq(FIELD_NAME, FIELD_VALUE)).first())
                     .filter(first -> FIELD_VALUE.equals(first.getString(FIELD_NAME)))
-                    .map(r -> HealthCheck.Result.healthy())
-                    .orElse(HealthCheck.Result.unhealthy(UNHEALTHY_MESSAGE));
+                    .map(r -> healthy())
+                    .orElse(unhealthy());
         });
+    }
+
+    private HealthCheck.Result healthy() {
+        LOG.info("Health check succeeded.");
+        return HealthCheck.Result.healthy();
+    }
+
+    private Result unhealthy() {
+        LOG.error("Health check failed: " + UNHEALTHY_MESSAGE);
+        return Result.unhealthy(UNHEALTHY_MESSAGE);
     }
 }
