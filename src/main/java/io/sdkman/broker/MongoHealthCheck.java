@@ -43,20 +43,13 @@ class MongoHealthCheck implements HealthCheck {
         MongoDatabase mongo = mongoProvider.database();
         return Blocking.get(() -> {
             MongoCollection<Document> collection = mongo.getCollection(COLLECTION_NAME);
-            return Optional.ofNullable(collection.find(eq(FIELD_NAME, FIELD_VALUE)).first())
+            Result result = Optional.ofNullable(collection.find(eq(FIELD_NAME, FIELD_VALUE)).first())
                     .filter(first -> FIELD_VALUE.equals(first.getString(FIELD_NAME)))
-                    .map(r -> healthy())
-                    .orElse(unhealthy());
+                    .map(r -> Result.healthy())
+                    .orElse(Result.unhealthy(UNHEALTHY_MESSAGE));
+            LOG.info("Health check performed - healthy: " + result.isHealthy() + ", message: " + result.getMessage());
+            return result;
         });
     }
 
-    private HealthCheck.Result healthy() {
-        LOG.info("Health check succeeded.");
-        return HealthCheck.Result.healthy();
-    }
-
-    private Result unhealthy() {
-        LOG.error("Health check failed: " + UNHEALTHY_MESSAGE);
-        return Result.unhealthy(UNHEALTHY_MESSAGE);
-    }
 }
