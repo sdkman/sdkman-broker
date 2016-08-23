@@ -40,7 +40,7 @@ class MongoProvider {
                     mongoConfig.getUsername(),
                     mongoConfig.getDbName(),
                     mongoConfig.getPassword().toCharArray());
-            List credentials = new ArrayList<MongoCredential>() {{
+            List<MongoCredential> credentials = new ArrayList<MongoCredential>() {{
                 add(credential);
             }};
 
