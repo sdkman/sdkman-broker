@@ -1,4 +1,4 @@
-package io.sdkman.broker;
+package io.sdkman.broker.db;
 
 public class MongoConfig {
     private String host = "mongo";

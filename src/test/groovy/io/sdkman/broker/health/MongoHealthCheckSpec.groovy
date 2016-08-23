@@ -1,16 +1,15 @@
-package io.sdkman.broker
+package io.sdkman.broker.health
 
 import com.mongodb.client.FindIterable
 import com.mongodb.client.MongoCollection
 import com.mongodb.client.MongoDatabase
+import io.sdkman.broker.db.MongoProvider
 import org.bson.Document
-import org.bson.conversions.Bson
 import ratpack.test.exec.ExecHarness
 import spock.lang.AutoCleanup
 import spock.lang.Specification
 
-import static io.sdkman.broker.MongoHealthCheck.*
-import static ratpack.health.HealthCheck.Result
+import static io.sdkman.broker.health.MongoHealthCheck.*
 
 class MongoHealthCheckSpec extends Specification {
 

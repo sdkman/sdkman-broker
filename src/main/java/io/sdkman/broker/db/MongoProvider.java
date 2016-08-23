@@ -1,4 +1,4 @@
-package io.sdkman.broker;
+package io.sdkman.broker.db;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Singleton
-class MongoProvider {
+public class MongoProvider {
 
     private final static Logger LOG = LoggerFactory.getLogger(MongoProvider.class);
 

@@ -1,9 +1,10 @@
-package io.sdkman.broker;
+package io.sdkman.broker.health;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import io.sdkman.broker.db.MongoProvider;
 import org.bson.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,7 +18,7 @@ import java.util.Optional;
 import static com.mongodb.client.model.Filters.eq;
 
 @Singleton
-class MongoHealthCheck implements HealthCheck {
+public class MongoHealthCheck implements HealthCheck {
 
     private final static Logger LOG = LoggerFactory.getLogger(MongoHealthCheck.class);
 
