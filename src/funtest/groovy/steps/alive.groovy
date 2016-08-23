@@ -1,14 +1,10 @@
 package steps
 
-import wslite.rest.RESTClient
 import wslite.rest.RESTClientException
 
 import static cucumber.api.groovy.EN.And
-import static support.MongoHelper.*
-
-httpClient = new RESTClient("http://localhost:5050")
-httpClient.defaultContentTypeHeader = "application/json"
-httpClient.defaultCharset = "UTF-8"
+import static support.MongoHelper.clean
+import static support.MongoHelper.insertAliveInDb
 
 And(~/^an initialised database$/) { ->
     insertAliveInDb(db)
