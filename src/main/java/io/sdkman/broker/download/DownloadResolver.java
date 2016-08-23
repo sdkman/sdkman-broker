@@ -26,9 +26,11 @@ public class DownloadResolver {
     }
 
     public Promise<Optional<String>> download(String candidate, String version) throws Exception {
-        MongoDatabase mongo = mongoProvider.database();
-        return Blocking.get(() -> Optional.of(mongo.getCollection(COLLECTION_NAME))
-                .map(coll -> coll.find(and(eq(CANDIDATE_FIELD, candidate), eq(VERSION_FIELD, version))).first())
-                .map(doc -> doc.getString("url")));
+        return Blocking.get(() -> {
+            MongoDatabase mongo = mongoProvider.database();
+            return Optional.of(mongo.getCollection(COLLECTION_NAME))
+                    .map(coll -> coll.find(and(eq(CANDIDATE_FIELD, candidate), eq(VERSION_FIELD, version))).first())
+                    .map(doc -> doc.getString("url"));
+        });
     }
 }

@@ -41,8 +41,8 @@ public class MongoHealthCheck implements HealthCheck {
 
     @Override
     public Promise<Result> check(Registry registry) throws Exception {
-        MongoDatabase mongo = mongoProvider.database();
         return Blocking.get(() -> {
+            MongoDatabase mongo = mongoProvider.database();
             MongoCollection<Document> collection = mongo.getCollection(COLLECTION_NAME);
             Result result = Optional.ofNullable(collection.find(eq(FIELD_NAME, FIELD_VALUE)).first())
                     .filter(first -> FIELD_VALUE.equals(first.getString(FIELD_NAME)))
