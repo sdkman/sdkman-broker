@@ -9,8 +9,6 @@ import static support.MongoHelper.prepareDB
 appBaseUrl = "http://localhost:5050"
 httpClient = new RESTClient(appBaseUrl)
 
-statuses = [NOT_FOUND: 404, FOUND: 302]
-
 if(!binding.hasVariable("db")) {
     db = prepareDB()
 }

@@ -2,16 +2,16 @@ Feature: Download a Candidate Version
 	
 	Scenario: Redirect to a valid target
 		Given a valid Candidate Version "groovy" "2.4.7" hosted at "http://dl.bintray.com/groovy/maven/apache-groovy-binary-2.4.7.zip"
-		When I request the download URI "/download/groovy/2.4.7"
-		Then a "FOUND" status redirecting to "http://dl.bintray.com/groovy/maven/apache-groovy-binary-2.4.7.zip" is issued
-		
+		When the service is queried on "/download/groovy/2.4.7"
+		Then a response 302 status redirecting to "http://dl.bintray.com/groovy/maven/apache-groovy-binary-2.4.7.zip" is returned
+
 	Scenario: Respond to an invalid Candidate Version
 		Given a valid Candidate Version "groovy" "2.4.7" hosted at "http://dl.bintray.com/groovy/maven/apache-groovy-binary-2.4.7.zip"
-		When I request the download URI "/download/groovy/2.4.8"
-		Then a "NOT_FOUND" status is issued
+		When the service is queried on "/download/groovy/2.4.8"
+		Then the service response status is 404
 		
 	Scenario: Respond to an invalid Candidate
 		Given a Candidate "groovy" does not exist
-		When I request the download URI "/download/groovy"
-		Then a "NOT_FOUND" status is issued
+		When the service is queried on "/download/groovy"
+		Then the service response status is 404
 		
