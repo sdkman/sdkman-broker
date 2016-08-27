@@ -15,11 +15,11 @@ git branch -D "$BRANCH"
 git checkout -b "$BRANCH"
 
 #update version
-sed -i "s/1.0.0-SNAPSHOT/$VERSION/g" gradle.properties
-sed -i "s/1.0.0-SNAPSHOT/$VERSION/g" .travis.yml
-sed -i "s/1.0.0-SNAPSHOT/$VERSION/g" Dockerfile
-sed -i "s/1.0.0-SNAPSHOT/$VERSION/g" src/main/resources/version.properties
-git add gradle.properties .travis.yml Dockerfile src/main/resources/version.properties
+for file in "gradle.properties" ".travis.yml" "Dockerfile" "src/main/resources/version.properties"; do
+	sed -i "s/1.0.0-SNAPSHOT/$VERSION/g" "$file"
+	git add "$file"
+done
+
 git commit -m "Update version of $BRANCH to $VERSION"
 
 #push branch
