@@ -2,6 +2,7 @@ package io.sdkman.broker;
 
 import io.sdkman.broker.db.MongoConfig;
 import io.sdkman.broker.db.MongoProvider;
+import io.sdkman.broker.audit.AuditRecorder;
 import io.sdkman.broker.download.DownloadHandler;
 import io.sdkman.broker.download.DownloadResolver;
 import io.sdkman.broker.health.MongoHealthCheck;
@@ -27,6 +28,7 @@ public class Main {
                         .bind(MongoHealthCheck.class)
                         .bind(HealthCheckHandler.class)
                         .bind(VersionHandler.class)
+                        .bind(AuditRecorder.class)
                         .bind(DownloadResolver.class)
                         .bind(DownloadHandler.class)))
                 .handlers(chain -> chain

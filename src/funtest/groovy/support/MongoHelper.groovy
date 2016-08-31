@@ -8,6 +8,9 @@ import org.bson.types.ObjectId
 
 import java.util.concurrent.atomic.AtomicLong
 
+import static com.mongodb.client.model.Filters.and
+import static com.mongodb.client.model.Filters.eq
+
 class MongoHelper {
 
     static id = new AtomicLong()
@@ -19,7 +22,7 @@ class MongoHelper {
     }
 
     static insertAliveInDb(MongoDatabase db){
-        def collection  = db.getCollection("application", BasicDBObject.class)
+        def collection  = db.getCollection("application", BasicDBObject)
         def basicDbObject = new BasicDBObject()
         basicDbObject.append("_id", id.getAndIncrement().toString())
         basicDbObject.append("alive", "OK")
@@ -34,7 +37,7 @@ class MongoHelper {
     //  "url" : "http://dl.bintray.com/groovy/maven/apache-groovy-binary-2.4.7.zip"
     // }
     static insertCandidateVersionInDb(MongoDatabase db, String candidate, String version, String target) {
-        def collection  = db.getCollection("versions", BasicDBObject.class)
+        def collection  = db.getCollection("versions", BasicDBObject)
         def basicDbObject = new BasicDBObject()
         basicDbObject.append("_id", ObjectId.get())
         basicDbObject.append("_class", "Version")
@@ -42,6 +45,11 @@ class MongoHelper {
         basicDbObject.append("version", version)
         basicDbObject.append("url", target)
         collection.insertOne(basicDbObject)
+    }
+
+    static readAuditEntry(MongoDatabase db, String candidate, String version) {
+        def collection = db.getCollection("audit", BasicDBObject)
+        Optional.ofNullable(collection.find(and(eq("candidate", candidate), eq("version", version))).first()?.getString("version"))
     }
 
 

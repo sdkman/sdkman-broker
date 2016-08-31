@@ -6,7 +6,7 @@ import static cucumber.api.groovy.EN.And
 
 And(~/^the service is queried on "([^"]*)"$/) { String path ->
     try {
-        response = httpClient.get(path: path, followRedirects: false)
+        response = httpClient.get(path: path, followRedirects: false, query: [platform: 'Linux'])
     } catch (RESTClientException rce) {
         response = rce.response
     }
