@@ -34,15 +34,17 @@ class MongoHelper {
     //  "_class" : "Version",
     //  "candidate" : "groovy",
     //  "version" : "2.4.7",
+    //  "platform" : "UNIVERSAL"
     //  "url" : "http://dl.bintray.com/groovy/maven/apache-groovy-binary-2.4.7.zip"
     // }
-    static insertCandidateVersionInDb(MongoDatabase db, String candidate, String version, String target) {
+    static insertCandidateVersionInDb(MongoDatabase db, String candidate, String version, String platform, String target) {
         def collection  = db.getCollection("versions", BasicDBObject)
         def basicDbObject = new BasicDBObject()
         basicDbObject.append("_id", ObjectId.get())
         basicDbObject.append("_class", "Version")
         basicDbObject.append("candidate", candidate)
         basicDbObject.append("version", version)
+        basicDbObject.append("platform", platform)
         basicDbObject.append("url", target)
         collection.insertOne(basicDbObject)
     }

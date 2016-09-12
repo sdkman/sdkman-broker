@@ -9,8 +9,8 @@ And(~/^an initialised database$/) { ->
     insertAliveInDb(db)
 }
 
-And(~/^a valid Candidate Version (.*) (.*) hosted at (.*)$/) { String candidate, String version, String url ->
-    insertCandidateVersionInDb(db, candidate, version, url)
+And(~/^a valid (.*) Candidate Version (.*) (.*) hosted at (.*)$/) { String platform, String candidate, String version, String url ->
+    insertCandidateVersionInDb(db, candidate, version, platform, url)
 }
 
 And(~/^an uninitialised database$/) { ->
