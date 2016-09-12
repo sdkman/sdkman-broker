@@ -10,7 +10,7 @@ import ratpack.test.exec.ExecHarness
 import spock.lang.AutoCleanup
 import spock.lang.Specification
 
-import static io.sdkman.broker.download.DownloadResolver.COLLECTION_NAME
+import static VersionRepo.COLLECTION_NAME
 
 public class DownloadResolverSpec extends Specification {
 
@@ -21,7 +21,7 @@ public class DownloadResolverSpec extends Specification {
 
     def mongoProvider = Mock(MongoProvider)
 
-    def downloadResolver = new DownloadResolver(mongoProvider)
+    def downloadResolver = new VersionRepo(mongoProvider)
 
     void "should retrieve an option of download url for an existing candidate version combination"() {
         given:
@@ -43,7 +43,7 @@ public class DownloadResolverSpec extends Specification {
 
         when:
         def result = execHarness.yieldSingle {
-            downloadResolver.download(candidate, version)
+            downloadResolver.resolveDownloadUrl(candidate, version)
         }.value
 
         then:
@@ -67,7 +67,7 @@ public class DownloadResolverSpec extends Specification {
 
         when:
         def result = execHarness.yieldSingle {
-            downloadResolver.download(candidate, version)
+            downloadResolver.resolveDownloadUrl(candidate, version)
         }.value
 
         then:

@@ -3,7 +3,7 @@ package io.sdkman.broker.download;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import io.sdkman.broker.audit.AuditEntry;
-import io.sdkman.broker.audit.AuditRecorder;
+import io.sdkman.broker.audit.AuditRepo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ratpack.handling.Context;
@@ -17,13 +17,13 @@ public class DownloadHandler implements Handler {
 
     private final static String COMMAND = "install";
 
-    private DownloadResolver downloadResolver;
-    private AuditRecorder auditRecorder;
+    private VersionRepo versionRepo;
+    private AuditRepo auditRepo;
 
     @Inject
-    public DownloadHandler(DownloadResolver downloadResolver, AuditRecorder auditRecorder) {
-        this.downloadResolver = downloadResolver;
-        this.auditRecorder = auditRecorder;
+    public DownloadHandler(VersionRepo versionRepo, AuditRepo auditRepo) {
+        this.versionRepo = versionRepo;
+        this.auditRepo = auditRepo;
     }
 
     @Override
@@ -35,10 +35,10 @@ public class DownloadHandler implements Handler {
         String agent = ctx.getRequest().getHeaders().get("user-agent");
         String platform = ctx.getRequest().getQueryParams().get("platform");
         LOG.info("Received download request for: " + candidate + " " + version);
-        downloadResolver.download(candidate, version)
+        versionRepo.resolveDownloadUrl(candidate, version)
                 .then(result -> {
                     if (result.isPresent()) {
-                        auditRecorder.record(new AuditEntry(COMMAND, candidate, version, host, agent, platform));
+                        auditRepo.record(new AuditEntry(COMMAND, candidate, version, host, agent, platform));
                         ctx.redirect(302, result.get());
                     } else {
                         ctx.clientError(404);

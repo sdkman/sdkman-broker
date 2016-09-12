@@ -11,14 +11,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Singleton
-public class AuditRecorder {
+public class AuditRepo {
 
-    private final static Logger LOG = LoggerFactory.getLogger(AuditRecorder.class);
+    private final static Logger LOG = LoggerFactory.getLogger(AuditRepo.class);
 
     private MongoProvider mongoProvider;
 
     @Inject
-    public AuditRecorder(MongoProvider mongoProvider) {
+    public AuditRepo(MongoProvider mongoProvider) {
         this.mongoProvider = mongoProvider;
     }
 

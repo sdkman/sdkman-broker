@@ -13,7 +13,7 @@ import static com.mongodb.client.model.Filters.and;
 import static com.mongodb.client.model.Filters.eq;
 
 @Singleton
-public class DownloadResolver {
+public class VersionRepo {
 
     public static final String COLLECTION_NAME = "versions";
     public static final String CANDIDATE_FIELD = "candidate";
@@ -21,11 +21,11 @@ public class DownloadResolver {
     private final MongoProvider mongoProvider;
 
     @Inject
-    public DownloadResolver(MongoProvider mongoProvider) {
+    public VersionRepo(MongoProvider mongoProvider) {
         this.mongoProvider = mongoProvider;
     }
 
-    public Promise<Optional<String>> download(String candidate, String version) throws Exception {
+    public Promise<Optional<String>> resolveDownloadUrl(String candidate, String version) throws Exception {
         return Blocking.get(() -> {
             MongoDatabase mongo = mongoProvider.database();
             return Optional.of(mongo.getCollection(COLLECTION_NAME))
