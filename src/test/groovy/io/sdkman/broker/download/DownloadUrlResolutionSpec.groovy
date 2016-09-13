@@ -12,7 +12,7 @@ import spock.lang.Specification
 
 import static VersionRepo.COLLECTION_NAME
 
-public class DownloadResolverSpec extends Specification {
+public class DownloadUrlResolutionSpec extends Specification {
 
     @AutoCleanup
     ExecHarness execHarness = ExecHarness.harness()
