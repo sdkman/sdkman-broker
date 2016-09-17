@@ -12,6 +12,14 @@ And(~/^a request is made on (.*) using (.*)$/) { String path, String platform ->
     }
 }
 
+And(~/^a request is made for (.*)$/) { String path ->
+    try {
+        response = httpClient.get(path: path)
+    } catch (RESTClientException rce) {
+        response = rce.response
+    }
+}
+
 And(~/^the service response status is (\d+)$/) { int status ->
     assert response.statusCode == status
 }
