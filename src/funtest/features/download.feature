@@ -1,19 +1,32 @@
 Feature: Download a Candidate Version
-	
-	Scenario: Redirect to a valid target
-		Given a valid UNIVERSAL Candidate Version groovy 2.4.7 hosted at http://dl.bintray.com/groovy/maven/apache-groovy-binary-2.4.7.zip
-		When the service is queried on /download/groovy/2.4.7
-		Then a response 302 status redirecting to http://dl.bintray.com/groovy/maven/apache-groovy-binary-2.4.7.zip is returned
-		And an audit entry for groovy 2.4.7 is recorded
 
-	Scenario: Respond to an invalid Candidate Version
-		Given a valid UNIVERSAL Candidate Version groovy 2.4.7 hosted at http://dl.bintray.com/groovy/maven/apache-groovy-binary-2.4.7.zip
-		When the service is queried on /download/groovy/2.4.8
+	Scenario: Download a Universal binary
+		Given a valid UNIVERSAL binary for groovy 2.4.7 hosted at http://dl.bintray.com/groovy/maven/apache-groovy-binary-2.4.7.zip
+		When a request is made on /download/groovy/2.4.7 using Linux
+		Then a redirect to http://dl.bintray.com/groovy/maven/apache-groovy-binary-2.4.7.zip is returned
+		And an audit entry for groovy 2.4.7 UNIVERSAL is recorded
+
+	@pending
+	Scenario: Download a specific binary for a supported platform
+		Given a valid MAC_OSX binary for java 8u101 hosted at http://download.oracle.com/otn-pub/java/jdk/8u101-b13/jdk-8u101-macosx-x64.dmg
+		When a request is made on /download/java/8u101 using Darwin
+		Then a redirect to http://download.oracle.com/otn-pub/java/jdk/8u101-b13/jdk-8u101-macosx-x64.dmg is returned
+		And an audit entry for java 8u101 MAC_OSX is recorded
+
+	@pending
+	Scenario: Download a specific binary for an unsupported platform
+		Given a valid MAC_OSX binary for java 8u101 hosted at http://download.oracle.com/otn-pub/java/jdk/8u101-b13/jdk-8u101-macosx-x64.dmg
+		When a request is made on /download/java/8u101 using FreeBSD
 		Then the service response status is 404
-		And an audit entry for groovy 2.4.8 is not recorded
+		And an audit entry for java 8u101 FREE_BSD is not recorded
+
+	Scenario: Attempt downloading an invalid Candidate Version
+		Given a valid UNIVERSAL binary for groovy 2.4.7 hosted at http://dl.bintray.com/groovy/maven/apache-groovy-binary-2.4.7.zip
+		When a request is made on /download/groovy/2.4.8 using Linux
+		Then the service response status is 404
+		And an audit entry for groovy 2.4.8 UNIVERSAL is not recorded
 		
-	Scenario: Respond to an invalid Candidate
+	Scenario: Attempt downloading an invalid Candidate
 		Given a Candidate groovy does not exist
-		When the service is queried on /download/groovy
+		When a request is made on /download/groovy using Linux
 		Then the service response status is 404
-		

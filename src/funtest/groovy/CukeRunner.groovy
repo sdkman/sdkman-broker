@@ -8,6 +8,6 @@ import org.junit.runner.RunWith
         strict=true,
         features=["src/funtest/features"],
         glue=["src/funtest/groovy"],
-        tags=["~@manual", "~@review"]
+        tags=["~@manual", "~@review", "~@pending"]
 )
 class CukeRunner {}
