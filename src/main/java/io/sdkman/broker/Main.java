@@ -21,6 +21,7 @@ public class Main {
                 .serverConfig(c -> c
                         .props(asByteSource(getResource("version.properties")))
                         .env()
+                        .sysProps()
                         .require("/broker", VersionConfig.class)
                         .require("/mongo", MongoConfig.class))
                 .registry(Guice.registry(g -> g

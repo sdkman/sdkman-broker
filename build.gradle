@@ -33,6 +33,10 @@ dependencies {
 
 mainClassName = "io.sdkman.broker.Main"
 
+run {
+  systemProperties System.getProperties()
+}
+
 configurations {
   funTestCompile.extendsFrom testCompile
   funTestRuntime.extendsFrom testRuntime
