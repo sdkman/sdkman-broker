@@ -10,6 +10,7 @@ import ratpack.handling.Context;
 import ratpack.handling.Handler;
 import ratpack.path.PathTokens;
 
+import java.util.List;
 import java.util.Optional;
 
 @Singleton
@@ -40,26 +41,21 @@ public class DownloadHandler implements Handler {
         String uname = ctx.getRequest().getQueryParams().get("platform");
         LOG.info("Received download request for: " + candidate + " " + version);
 
-        versionRepo.resolveDownloadUrl(candidate, version)
-                .then(results -> {
-                    if (!results.isEmpty()) {
-                        Optional<Platform> maybePlatform = Platform.of(uname);
-                        if (maybePlatform.isPresent()) {
-                            Optional<Version> resolved = downloadResolver.resolve(results, maybePlatform.get().toString());
-                            if (resolved.isPresent()) {
-                                recordAudit(candidate, version, host, agent, resolved);
-                                ctx.redirect(302, resolved.map(Version::getUrl).get());
-                            } else ctx.clientError(404);
-                        } else ctx.clientError(400);
-                    } else ctx.clientError(404);
-                });
+        if (!Platform.of(uname).isPresent()) ctx.clientError(400);
+        else Platform.of(uname).ifPresent(platform -> versionRepo
+                .fetchDownloads(candidate, version)
+                .then((List<Version> downloads) -> {
+                    Optional<Version> resolved = downloadResolver.resolve(downloads, platform.name());
+                    if (!resolved.isPresent()) ctx.clientError(404);
+                    else resolved.ifPresent(v -> {
+                        recordAudit(candidate, version, host, agent, v.getPlatform());
+                        ctx.redirect(302, v.getUrl());
+                    });
+                }));
     }
 
-    private void recordAudit(String candidate, String version, String host, String agent, Optional<Version> maybeResolved) {
-        AuditEntry auditEntry = new AuditEntry(
-                COMMAND, candidate, version, host, agent,
-                maybeResolved.map(Version::getPlatform).orElse("UNKNOWN"));
-
+    private void recordAudit(String candidate, String version, String host, String agent, String platform) {
+        AuditEntry auditEntry = new AuditEntry(COMMAND, candidate, version, host, agent, platform);
         try {
             auditRepo.record(auditEntry);
         } catch (Exception e) {
