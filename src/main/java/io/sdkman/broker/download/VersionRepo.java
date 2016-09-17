@@ -2,13 +2,13 @@ package io.sdkman.broker.download;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.mongodb.client.MongoDatabase;
 import io.sdkman.broker.db.MongoProvider;
 import ratpack.exec.Blocking;
 import ratpack.exec.Promise;
 
-import java.util.Optional;
+import java.util.List;
 
+import static com.google.common.collect.Lists.newArrayList;
 import static com.mongodb.client.model.Filters.and;
 import static com.mongodb.client.model.Filters.eq;
 
@@ -25,12 +25,16 @@ public class VersionRepo {
         this.mongoProvider = mongoProvider;
     }
 
-    public Promise<Optional<String>> resolveDownloadUrl(String candidate, String version) throws Exception {
-        return Blocking.get(() -> {
-            MongoDatabase mongo = mongoProvider.database();
-            return Optional.of(mongo.getCollection(COLLECTION_NAME))
-                    .map(coll -> coll.find(and(eq(CANDIDATE_FIELD, candidate), eq(VERSION_FIELD, version))).first())
-                    .map(doc -> doc.getString("url"));
-        });
+    public Promise<List<Version>> resolveDownloadUrl(String candidate, String version) throws Exception {
+        return Blocking.get(() -> newArrayList(
+                mongoProvider
+                        .database()
+                        .getCollection(COLLECTION_NAME)
+                        .find(and(eq(CANDIDATE_FIELD, candidate), eq(VERSION_FIELD, version)))
+                        .map(doc -> new Version(
+                                candidate,
+                                version,
+                                doc.getString("url"),
+                                doc.getString("platform")))));
     }
 }
