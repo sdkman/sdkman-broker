@@ -25,7 +25,7 @@ public class VersionRepo {
         this.mongoProvider = mongoProvider;
     }
 
-    public Promise<List<Version>> fetchDownloads(String candidate, String version) {
+    public Promise<List<Version>> fetch(String candidate, String version) {
         return Blocking.get(() -> newArrayList(
                 mongoProvider
                         .database()

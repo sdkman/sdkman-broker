@@ -43,7 +43,7 @@ public class DownloadHandler implements Handler {
 
         if (!Platform.of(uname).isPresent()) ctx.clientError(400);
         else Platform.of(uname).ifPresent(platform -> versionRepo
-                .fetchDownloads(candidate, version)
+                .fetch(candidate, version)
                 .then((List<Version> downloads) -> {
                     Optional<Version> resolved = downloadResolver.resolve(downloads, platform.name());
                     if (!resolved.isPresent()) ctx.clientError(404);
