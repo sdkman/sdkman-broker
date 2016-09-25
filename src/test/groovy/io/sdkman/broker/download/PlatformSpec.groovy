@@ -4,6 +4,11 @@ import spock.lang.Specification
 
 class PlatformSpec extends Specification {
 
+    void "should resolve empty if uname is null"() {
+        expect:
+        Platform.of(null) == Optional.empty()
+    }
+
     void "should resolve mac osx uname as a platform"() {
         expect:
         Platform.of("Darwin").get() == Platform.MAC_OSX
