@@ -48,7 +48,8 @@ public class MongoHealthCheck implements HealthCheck {
                     .filter(first -> FIELD_VALUE.equals(first.getString(FIELD_NAME)))
                     .map(r -> Result.healthy())
                     .orElse(Result.unhealthy(UNHEALTHY_MESSAGE));
-            LOG.info("Health check performed - healthy: " + result.isHealthy() + ", message: " + result.getMessage());
+            LOG.info("Health check performed - healthy: " + result.isHealthy() +
+                    ", message: " + Optional.ofNullable(result.getMessage()).orElse("nothing to report"));
             return result;
         });
     }
