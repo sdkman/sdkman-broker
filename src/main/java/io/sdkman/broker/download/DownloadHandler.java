@@ -39,6 +39,7 @@ public class DownloadHandler implements Handler {
         String host = ctx.getRequest().getHeaders().get("X-Real-IP");
         String agent = ctx.getRequest().getHeaders().get("user-agent");
         String uname = ctx.getRequest().getQueryParams().get("platform");
+
         LOG.info("Received download request for: " + candidate + " " + version);
 
         if (!Platform.of(uname).isPresent()) ctx.clientError(400);
@@ -50,14 +51,13 @@ public class DownloadHandler implements Handler {
                     if (!resolved.isPresent()) ctx.clientError(404);
 
                     resolved.ifPresent(v -> {
-                        recordAudit(candidate, version, host, agent, v.getPlatform());
+                        record(new AuditEntry(COMMAND, candidate, version, host, agent, v.getPlatform()));
                         ctx.redirect(302, v.getUrl());
                     });
                 }));
     }
 
-    private void recordAudit(String candidate, String version, String host, String agent, String platform) {
-        AuditEntry auditEntry = new AuditEntry(COMMAND, candidate, version, host, agent, platform);
+    private void record(AuditEntry auditEntry) {
         try {
             auditRepo.record(auditEntry);
         } catch (Exception e) {
