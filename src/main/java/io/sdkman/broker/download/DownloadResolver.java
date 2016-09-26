@@ -1,6 +1,8 @@
 package io.sdkman.broker.download;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public class DownloadResolver {
@@ -8,17 +10,12 @@ public class DownloadResolver {
     public static final String UNIVERSAL_PLATFORM = "UNIVERSAL";
 
     public Optional<Version> resolve(List<Version> versions, String platform) {
-        Optional<Version> universalVersion = platformVersion(versions, UNIVERSAL_PLATFORM);
-        if (universalVersion.isPresent()) {
-            return universalVersion;
-        } else {
-            return platformVersion(versions, platform);
-        }
-    }
+        Map<String, Version> versionMap = new HashMap<String, Version>() {{
+            versions.forEach(v -> put(v.getPlatform(), v));
+        }};
 
-    private Optional<Version> platformVersion(List<Version> versions, String platform) {
-        return versions.stream()
-                .filter(v -> platform.equals(v.getPlatform()))
-                .findFirst();
+        return Optional.ofNullable(
+                Optional.ofNullable(versionMap.get(UNIVERSAL_PLATFORM))
+                        .orElse(versionMap.get(platform)));
     }
 }
