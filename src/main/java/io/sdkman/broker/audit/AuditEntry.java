@@ -61,7 +61,7 @@ public class AuditEntry {
                 '}';
     }
 
-    public static AuditEntry of(String command, RequestDetails d) {
-        return new AuditEntry(command, d.getCandidate(), d.getVersion(), d.getHost(), d.getAgent(), d.getUname());
+    public static AuditEntry of(String command, RequestDetails d, String platform) {
+        return new AuditEntry(command, d.getCandidate(), d.getVersion(), d.getHost(), d.getAgent(), platform);
     }
 }

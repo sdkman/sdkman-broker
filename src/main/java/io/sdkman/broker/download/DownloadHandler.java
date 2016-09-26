@@ -41,11 +41,9 @@ public class DownloadHandler implements Handler {
                 .fetch(details.getCandidate(), details.getVersion())
                 .then((List<Version> downloads) -> {
                     Optional<Version> resolved = downloadResolver.resolve(downloads, platform.name());
-
                     if (!resolved.isPresent()) ctx.clientError(404);
-
                     resolved.ifPresent(v -> {
-                        record(AuditEntry.of(COMMAND, details));
+                        record(AuditEntry.of(COMMAND, details, v.getPlatform()));
                         ctx.redirect(302, v.getUrl());
                     });
                 }));
