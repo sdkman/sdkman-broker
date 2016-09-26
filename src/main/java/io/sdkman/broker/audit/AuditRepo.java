@@ -35,6 +35,6 @@ public class AuditRepo {
         basicDbObject.append("platform", auditEntry.getPlatform());
         basicDbObject.append("timestamp", auditEntry.getTimestamp());
         collection.insertOne(basicDbObject);
-        LOG.debug("Logged: " + auditEntry);
+        LOG.info("Logged: " + auditEntry);
     }
 }
