@@ -22,9 +22,8 @@ public enum Platform {
 
     public static Optional<Platform> of(String uname) {
         return Optional.ofNullable(uname)
-                .flatMap(x ->
-                        stream(Platform.values())
-                                .filter(p -> p.unames.stream().anyMatch(uname::startsWith))
-                                .findFirst());
+                .flatMap(u -> stream(Platform.values())
+                        .filter(p -> p.unames.stream().anyMatch(u::startsWith))
+                        .findFirst());
     }
 }
