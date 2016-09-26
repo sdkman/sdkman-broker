@@ -33,25 +33,19 @@ public class DownloadHandler implements Handler {
 
     @Override
     public void handle(Context ctx) throws Exception {
-        PathTokens pathTokens = ctx.getAllPathTokens();
-        String candidate = pathTokens.get("candidate");
-        String version = pathTokens.get("version");
-        String host = ctx.getRequest().getHeaders().get("X-Real-IP");
-        String agent = ctx.getRequest().getHeaders().get("user-agent");
-        String uname = ctx.getRequest().getQueryParams().get("platform");
+        RequestDetails details = RequestDetails.of(ctx);
+        LOG.info("Received download request for: " + details.getCandidate() + " " + details.getVersion());
 
-        LOG.info("Received download request for: " + candidate + " " + version);
-
-        if (!Platform.of(uname).isPresent()) ctx.clientError(400);
-        else Platform.of(uname).ifPresent(platform -> versionRepo
-                .fetch(candidate, version)
+        if (!Platform.of(details.getUname()).isPresent()) ctx.clientError(400);
+        else Platform.of(details.getUname()).ifPresent(platform -> versionRepo
+                .fetch(details.getCandidate(), details.getVersion())
                 .then((List<Version> downloads) -> {
                     Optional<Version> resolved = downloadResolver.resolve(downloads, platform.name());
 
                     if (!resolved.isPresent()) ctx.clientError(404);
 
                     resolved.ifPresent(v -> {
-                        record(new AuditEntry(COMMAND, candidate, version, host, agent, v.getPlatform()));
+                        record(AuditEntry.of(COMMAND, details));
                         ctx.redirect(302, v.getUrl());
                     });
                 }));
