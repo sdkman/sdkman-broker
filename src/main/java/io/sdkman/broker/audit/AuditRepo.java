@@ -33,6 +33,7 @@ public class AuditRepo {
         basicDbObject.append("host", auditEntry.getHost());
         basicDbObject.append("agent", auditEntry.getAgent());
         basicDbObject.append("platform", auditEntry.getPlatform());
+        basicDbObject.append("uname", auditEntry.getUname());
         basicDbObject.append("timestamp", auditEntry.getTimestamp());
         collection.insertOne(basicDbObject);
         LOG.info("Logged: " + auditEntry);

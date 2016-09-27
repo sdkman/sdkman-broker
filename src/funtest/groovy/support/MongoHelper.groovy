@@ -49,9 +49,15 @@ class MongoHelper {
         collection.insertOne(basicDbObject)
     }
 
-    static readAuditEntry(MongoDatabase db, String candidate, String version, String platform) {
+    static readAuditEntry(MongoDatabase db, String candidate, String version, String distribution, String platform) {
         def collection = db.getCollection("audit", BasicDBObject)
-        Optional.ofNullable(collection.find(and(eq("candidate", candidate), eq("version", version), eq("platform", platform))).first()?.getString("version"))
+        Optional.ofNullable(
+                collection.find(and(
+                        eq("candidate", candidate),
+                        eq("version", version),
+                        eq("platform", distribution),
+                        eq("uname", platform)))
+                        .first()?.getString("version"))
     }
 
 

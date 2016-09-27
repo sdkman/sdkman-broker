@@ -9,15 +9,17 @@ public class AuditEntry {
     private final String host;
     private final String agent;
     private final String platform;
+    private final String uname;
     private final Long timestamp = System.currentTimeMillis();
 
-    public AuditEntry(String command, String candidate, String version, String host, String agent, String platform) {
+    public AuditEntry(String command, String candidate, String version, String host, String agent, String platform, String uname) {
         this.command = command;
         this.candidate = candidate;
         this.version = version;
         this.host = host;
         this.agent = agent;
         this.platform = platform;
+        this.uname = uname;
     }
 
     public String getCommand() {
@@ -44,6 +46,10 @@ public class AuditEntry {
         return platform;
     }
 
+    public String getUname() {
+        return uname;
+    }
+
     public Long getTimestamp() {
         return timestamp;
     }
@@ -57,11 +63,12 @@ public class AuditEntry {
                 ", host='" + host + '\'' +
                 ", agent='" + agent + '\'' +
                 ", platform='" + platform + '\'' +
+                ", uname='" + uname + '\'' +
                 ", timestamp=" + timestamp +
                 '}';
     }
 
     public static AuditEntry of(String command, RequestDetails d, String platform) {
-        return new AuditEntry(command, d.getCandidate(), d.getVersion(), d.getHost(), d.getAgent(), platform);
+        return new AuditEntry(command, d.getCandidate(), d.getVersion(), d.getHost(), d.getAgent(), platform, d.getUname());
     }
 }
