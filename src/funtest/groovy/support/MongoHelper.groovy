@@ -55,8 +55,8 @@ class MongoHelper {
                 collection.find(and(
                         eq("candidate", candidate),
                         eq("version", version),
-                        eq("platform", distribution),
-                        eq("uname", platform)))
+                        eq("platform", platform),
+                        eq("dist", distribution)))
                         .first()?.getString("version"))
     }
 
