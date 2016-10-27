@@ -36,11 +36,12 @@ public class DownloadHandler implements Handler {
         RequestDetails details = RequestDetails.of(ctx);
         LOG.info("Received download request for: " + details.getCandidate() + " " + details.getVersion());
 
-        if (!Platform.of(details.getUname()).isPresent()) ctx.clientError(400);
-        else Platform.of(details.getUname()).ifPresent(platform -> versionRepo
+        Optional<Platform> platform = Platform.of(details.getUname());
+        if (!platform.isPresent()) ctx.clientError(400);
+        else platform.ifPresent(p -> versionRepo
                 .fetch(details.getCandidate(), details.getVersion())
                 .then((List<Version> downloads) -> {
-                    Optional<Version> resolved = downloadResolver.resolve(downloads, platform.name());
+                    Optional<Version> resolved = downloadResolver.resolve(downloads, p.name());
                     if (!resolved.isPresent()) ctx.clientError(404);
                     resolved.ifPresent(v -> {
                         record(AuditEntry.of(COMMAND, details, v.getPlatform()));
