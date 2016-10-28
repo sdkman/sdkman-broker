@@ -14,6 +14,7 @@ public class DownloadResolver {
             versions.forEach(v -> put(v.getPlatform(), v));
         }};
 
+        //TODO: give platform precedence over universal
         return Optional.ofNullable(
                 Optional.ofNullable(versionMap.get(UNIVERSAL_PLATFORM))
                         .orElse(versionMap.get(platform)));
