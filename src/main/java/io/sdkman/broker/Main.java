@@ -35,6 +35,7 @@ public class Main {
                 .handlers(chain -> chain
                         .get("health/:name?", HealthCheckHandler.class)
                         .get("version", VersionHandler.class)
+                        .get("download/:candidate/:version/:platform", DownloadHandler.class)
                         .get("download/:candidate/:version", DownloadHandler.class)));
     }
 }

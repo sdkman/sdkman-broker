@@ -6,6 +6,8 @@ import ratpack.path.PathTokens;
 
 public class RequestDetails {
 
+    public static final String PLATFORM_PARAMETER_NAME = "platform";
+
     private final String candidate;
     private final String version;
     private final String host;
@@ -28,7 +30,13 @@ public class RequestDetails {
                 pathTokens.get("version"),
                 request.getHeaders().get("X-Real-IP"),
                 request.getHeaders().get("user-agent"),
-                request.getQueryParams().get("platform"));
+                determineNormalisedPlatform(pathTokens, request));
+    }
+
+    private static String determineNormalisedPlatform(PathTokens pathTokens, Request request) {
+        return pathTokens.get(PLATFORM_PARAMETER_NAME) != null ?
+                pathTokens.get(PLATFORM_PARAMETER_NAME) :
+                request.getQueryParams().get(PLATFORM_PARAMETER_NAME).toLowerCase();
     }
 
     public String getCandidate() {
@@ -49,5 +57,16 @@ public class RequestDetails {
 
     public String getUname() {
         return uname;
+    }
+
+    @Override
+    public String toString() {
+        return "RequestDetails{" +
+                "candidate='" + candidate + '\'' +
+                ", version='" + version + '\'' +
+                ", host='" + host + '\'' +
+                ", agent='" + agent + '\'' +
+                ", uname='" + uname + '\'' +
+                '}';
     }
 }

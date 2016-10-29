@@ -1,7 +1,5 @@
 package io.sdkman.broker.audit;
 
-import io.sdkman.broker.download.RequestDetails;
-
 public class AuditEntry {
     private final String command;
     private final String candidate;
@@ -68,7 +66,8 @@ public class AuditEntry {
                 '}';
     }
 
-    public static AuditEntry of(String command, RequestDetails d, String platform) {
-        return new AuditEntry(command, d.getCandidate(), d.getVersion(), d.getHost(), d.getAgent(), d.getUname(), platform);
+    public static AuditEntry of(String command, String candidate, String version,
+                                String host, String agent, String uname, String platform) {
+        return new AuditEntry(command, candidate, version, host, agent, uname, platform);
     }
 }

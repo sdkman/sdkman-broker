@@ -8,7 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ratpack.handling.Context;
 import ratpack.handling.Handler;
-import ratpack.path.PathTokens;
 
 import java.util.List;
 import java.util.Optional;
@@ -44,17 +43,19 @@ public class DownloadHandler implements Handler {
                     Optional<Version> resolved = downloadResolver.resolve(downloads, p.name());
                     if (!resolved.isPresent()) ctx.clientError(404);
                     resolved.ifPresent(v -> {
-                        record(AuditEntry.of(COMMAND, details, v.getPlatform()));
+                        record(details, p.uname(), v.getPlatform());
                         ctx.redirect(302, v.getUrl());
                     });
                 }));
     }
 
-    private void record(AuditEntry auditEntry) {
+    private void record(RequestDetails details, String uname, String platform) {
         try {
-            auditRepo.record(auditEntry);
+            auditRepo.record(
+                    AuditEntry.of(COMMAND, details.getCandidate(), details.getVersion(), details.getHost(),
+                    details.getAgent(), uname, platform));
         } catch (Exception e) {
-            LOG.error("Unable record audit entry: " + auditEntry + " - " + e.getMessage());
+            LOG.error("Unable record audit entry: " + details + " - " + e.getMessage());
         }
     }
 }

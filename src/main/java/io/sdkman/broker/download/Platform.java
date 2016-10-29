@@ -22,8 +22,13 @@ public enum Platform {
 
     public static Optional<Platform> of(String uname) {
         return Optional.ofNullable(uname)
+                .map(String::toLowerCase)
                 .flatMap(u -> stream(Platform.values())
-                        .filter(p -> p.unames.stream().anyMatch(u::startsWith))
+                        .filter(p -> p.unames.stream().map(String::toLowerCase).anyMatch(u::startsWith))
                         .findFirst());
+    }
+
+    public String uname() {
+        return unames.get(0);
     }
 }
