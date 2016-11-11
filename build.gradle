@@ -1,6 +1,3 @@
-import com.bmuschko.gradle.docker.tasks.container.*
-import com.bmuschko.gradle.docker.tasks.image.*
-
 buildscript {
   repositories {
     jcenter()
@@ -8,13 +5,11 @@ buildscript {
   dependencies {
     classpath "io.ratpack:ratpack-gradle:1.4.2"
     classpath "com.github.jengelman.gradle.plugins:shadow:1.2.3"
-    classpath "com.bmuschko:gradle-docker-plugin:3.0.3"
   }
 }
 
 apply plugin: "io.ratpack.ratpack-java"
 apply plugin: "com.github.johnrengelman.shadow"
-apply plugin: "com.bmuschko.docker-remote-api"
 apply plugin: "idea"
 apply plugin: "groovy"
 
@@ -61,71 +56,9 @@ sourceSets {
 
 assemble.dependsOn shadowJar
 
-docker {
-  url = "unix:///var/run/docker.sock"
-}
-
-task pullDbImage(type: DockerPullImage) {
-  repository = "mongo"
-  tag = "3.2"
-}
-
-task createDbContainer(type: DockerCreateContainer) {
-  dependsOn pullDbImage
-  containerName = "mongo"
-  imageId = "${pullDbImage.repository}:${pullDbImage.tag}"
-  portBindings = ["27017:27017"]
-  exposePorts("tcp", [27017])
-}
-
-task startDbContainer(type: DockerStartContainer) {
-  dependsOn createDbContainer
-  targetContainerId { createDbContainer.containerId }
-}
-
-task stopDbContainer(type: DockerStopContainer) {
-  targetContainerId { createDbContainer.containerId }
-}
-
-task removeDbContainer(type: DockerRemoveContainer) {
-  dependsOn stopDbContainer
-  targetContainerId { createDbContainer.containerId }
-}
-
-task buildAppImage(type: DockerBuildImage) {
-  dependsOn assemble
-  inputDir = file(".")
-  tag = "sdkman/sdkman-broker:${version}"
-}
-
-task createAppContainer(type: DockerCreateContainer) {
-  containerName = "sdkman_broker"
-  dependsOn buildAppImage, startDbContainer
-  targetImageId { buildAppImage.imageId }
-  portBindings = ["5050:5050"]
-  exposePorts("tcp", [5050])
-  links = ["mongo:mongo"]
-}
-
-task startAppContainer(type: DockerStartContainer) {
-  dependsOn createAppContainer
-  targetContainerId { createAppContainer.containerId }
-}
-
-task stopAppContainer(type: DockerStopContainer) {
-  targetContainerId { createAppContainer.containerId }
-}
-
-task removeAppContainer(type: DockerRemoveContainer) {
-  dependsOn stopAppContainer
-  targetContainerId { createAppContainer.containerId }
-}
-
 task funtest(type: Test) {
   testClassesDir = sourceSets.funtest.output.classesDir
   classpath = sourceSets.funtest.runtimeClasspath
-  dependsOn startAppContainer
-  finalizedBy removeAppContainer, removeDbContainer
 }
 
 check.dependsOn funtest
