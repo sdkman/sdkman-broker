@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import io.sdkman.broker.audit.AuditEntry;
 import io.sdkman.broker.audit.AuditRepo;
+import io.sdkman.broker.lang.OptionalConsumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ratpack.handling.Context;
@@ -35,25 +36,25 @@ public class DownloadHandler implements Handler {
         RequestDetails details = RequestDetails.of(ctx);
         LOG.info("Received download request for: " + details.getCandidate() + " " + details.getVersion());
 
-        Optional<Platform> platform = Platform.of(details.getUname());
-        if (!platform.isPresent()) ctx.clientError(400);
-        else platform.ifPresent(p -> versionRepo
-                .fetch(details.getCandidate(), details.getVersion())
-                .then((List<Version> downloads) -> {
-                    Optional<Version> resolved = downloadResolver.resolve(downloads, p.name());
-                    if (!resolved.isPresent()) ctx.clientError(404);
-                    resolved.ifPresent(v -> {
-                        record(details, p.uname(), v.getPlatform());
-                        ctx.redirect(302, v.getUrl());
-                    });
-                }));
+        OptionalConsumer.of(Platform.of(details.getUname()))
+                .ifPresent(p -> versionRepo
+                        .fetch(details.getCandidate(), details.getVersion())
+                        .then((List<Version> downloads) -> {
+                            OptionalConsumer.of(downloadResolver.resolve(downloads, p.name()))
+                                    .ifPresent(v -> {
+                                        record(details, p.uname(), v.getPlatform());
+                                        ctx.redirect(302, v.getUrl());
+                                    })
+                                    .ifNotPresent(() -> ctx.clientError(404));
+                        }))
+                .ifNotPresent(() -> ctx.clientError(400));
     }
 
     private void record(RequestDetails details, String uname, String platform) {
         try {
             auditRepo.record(
                     AuditEntry.of(COMMAND, details.getCandidate(), details.getVersion(), details.getHost(),
-                    details.getAgent(), uname, platform));
+                            details.getAgent(), uname, platform));
         } catch (Exception e) {
             LOG.error("Unable record audit entry: " + details + " - " + e.getMessage());
         }
