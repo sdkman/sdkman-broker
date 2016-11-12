@@ -36,10 +36,3 @@ Feature: Download a Candidate Version
 		Given a Candidate groovy does not exist
 		When a request is made on /download/groovy/linux
 		Then the service response status is 404
-
-	Scenario: Download a Java Binary
-		Given a valid MAC_OSX binary for java 8u111 hosted at http://download.oracle.com/otn-pub/java/jdk/8u111-b13/jdk-8u111-macosx-x64.dmg
-		When a request is made on /download/java/8u111/darwin
-		Then the service response status is 302
-		And the service responds with an "oraclelicense" cookie with value "accept-securebackup-cookie"
-

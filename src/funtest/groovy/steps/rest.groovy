@@ -36,7 +36,3 @@ And(~/^the response contains (.*) as (.*)$/) { String key, String value ->
 And(~/^the response contains an (.*)$/) { String key ->
     assert response.json[(key)]
 }
-
-And(~/^the service responds with an "([^"]*)" cookie with value "([^"]*)"$/) { String cookieName, String cookieValue ->
-    assert response.headers['set-cookie'] == "$cookieName=$cookieValue"
-}
