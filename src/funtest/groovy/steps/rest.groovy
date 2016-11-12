@@ -4,7 +4,7 @@ import wslite.rest.RESTClientException
 
 import static cucumber.api.groovy.EN.And
 
-And(~/^a request is made on "(.*?)"$/) { String path ->
+And(~/^a request is made on (.*?)$/) { String path ->
     try {
         response = httpClient.get(path: path, followRedirects: false)
     } catch (RESTClientException rce) {

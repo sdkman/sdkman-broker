@@ -11,14 +11,16 @@ import ratpack.handling.Context;
 import ratpack.handling.Handler;
 
 import java.util.List;
-import java.util.Optional;
 
 @Singleton
 public class DownloadHandler implements Handler {
 
     private final static Logger LOG = LoggerFactory.getLogger(DownloadHandler.class);
 
-    private final static String COMMAND = "install";
+    private static final String COMMAND = "install";
+    private static final String JAVA_CANDIDATE = "java";
+    private static final String ORACLE_LICENSE_COOKIE_NAME = "oraclelicense";
+    private static final String ORACLE_LICENSE_COOKIE_VALUE = "accept-securebackup-cookie";
 
     private VersionRepo versionRepo;
     private AuditRepo auditRepo;
@@ -33,21 +35,21 @@ public class DownloadHandler implements Handler {
 
     @Override
     public void handle(Context ctx) throws Exception {
-        RequestDetails details = RequestDetails.of(ctx);
-        LOG.info("Received download request for: " + details.getCandidate() + " " + details.getVersion());
+        OptionalConsumer.of(RequestDetails.of(ctx)).ifPresent(details -> {
+                    LOG.info("Received download request for: " + details.getCandidate() + " " + details.getVersion());
 
-        OptionalConsumer.of(Platform.of(details.getUname()))
-                .ifPresent(p -> versionRepo
-                        .fetch(details.getCandidate(), details.getVersion())
-                        .then((List<Version> downloads) -> {
-                            OptionalConsumer.of(downloadResolver.resolve(downloads, p.name()))
-                                    .ifPresent(v -> {
-                                        record(details, p.uname(), v.getPlatform());
-                                        ctx.redirect(302, v.getUrl());
-                                    })
-                                    .ifNotPresent(() -> ctx.clientError(404));
-                        }))
-                .ifNotPresent(() -> ctx.clientError(400));
+                    OptionalConsumer.of(Platform.of(details.getUname()))
+                            .ifPresent(p -> versionRepo
+                                    .fetch(details.getCandidate(), details.getVersion())
+                                    .then((List<Version> downloads) -> OptionalConsumer.of(downloadResolver.resolve(downloads, p.name()))
+                                            .ifPresent(v -> {
+                                                record(details, p.uname(), v.getPlatform());
+                                                ctx.redirect(302, v.getUrl());
+                                            })
+                                            .ifNotPresent(() -> ctx.clientError(404))))
+                            .ifNotPresent(() -> ctx.clientError(400));
+                }
+        ).ifNotPresent(() -> ctx.clientError(404));
     }
 
     private void record(RequestDetails details, String uname, String platform) {
