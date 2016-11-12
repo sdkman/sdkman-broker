@@ -44,12 +44,19 @@ public class DownloadHandler implements Handler {
                                     .then((List<Version> downloads) -> OptionalConsumer.of(downloadResolver.resolve(downloads, p.name()))
                                             .ifPresent(v -> {
                                                 record(details, p.uname(), v.getPlatform());
+                                                setLicenseCookieForJava(ctx, v.getCandidate());
                                                 ctx.redirect(302, v.getUrl());
                                             })
                                             .ifNotPresent(() -> ctx.clientError(404))))
                             .ifNotPresent(() -> ctx.clientError(400));
                 }
         ).ifNotPresent(() -> ctx.clientError(404));
+    }
+
+    private void setLicenseCookieForJava(Context ctx, String candidate) {
+        if (JAVA_CANDIDATE.equals(candidate)) {
+            ctx.getResponse().cookie(ORACLE_LICENSE_COOKIE_NAME, ORACLE_LICENSE_COOKIE_VALUE);
+        }
     }
 
     private void record(RequestDetails details, String uname, String platform) {
