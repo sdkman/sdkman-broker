@@ -18,9 +18,6 @@ public class DownloadHandler implements Handler {
     private final static Logger LOG = LoggerFactory.getLogger(DownloadHandler.class);
 
     private static final String COMMAND = "install";
-    private static final String JAVA_CANDIDATE = "java";
-    private static final String ORACLE_LICENSE_COOKIE_NAME = "oraclelicense";
-    private static final String ORACLE_LICENSE_COOKIE_VALUE = "accept-securebackup-cookie";
 
     private VersionRepo versionRepo;
     private AuditRepo auditRepo;
