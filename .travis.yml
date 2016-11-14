@@ -3,6 +3,7 @@ services:
   - docker
 language: java
 before_install:
+  - apt-get install zip
   - docker login -e="$DOCKER_EMAIL" -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
   - docker run -d --net=host mongo:latest
 script:
