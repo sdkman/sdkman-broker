@@ -14,9 +14,19 @@ class PlatformSpec extends Specification {
         Platform.of("Darwin").get() == Platform.MAC_OSX
     }
 
-    void "should resolve linux uname as a platform"() {
+    void "should resolve linux uname as 64 bit linux"() {
         expect:
-        Platform.of("Linux").get() == Platform.LINUX
+        Platform.of("Linux").get() == Platform.LINUX_64
+    }
+
+    void "should resolve Linux64 uname as 64 bit linux"() {
+        expect:
+        Platform.of("Linux64").get() == Platform.LINUX_64
+    }
+
+    void "should resolve Linux32 uname as 32 bit linux"() {
+        expect:
+        Platform.of("Linux32").get() == Platform.LINUX_32
     }
 
     void "should resolve sun os uname as sunos"() {
