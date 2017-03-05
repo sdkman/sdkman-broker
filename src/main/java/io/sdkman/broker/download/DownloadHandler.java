@@ -33,14 +33,17 @@ public class DownloadHandler implements Handler {
     @Override
     public void handle(Context ctx) throws Exception {
         OptionalConsumer.of(RequestDetails.of(ctx)).ifPresent(details -> {
-                    LOG.info("Received download request for: " + details.getCandidate() + " " + details.getVersion());
+                    LOG.info("Received download request for: "
+                            + details.getCandidate() + " "
+                            + details.getVersion() + " "
+                            + details.getPlatform());
 
-                    OptionalConsumer.of(Platform.of(details.getUname()))
+                    OptionalConsumer.of(Platform.of(details.getPlatform()))
                             .ifPresent(p -> versionRepo
                                     .fetch(details.getCandidate(), details.getVersion())
                                     .then((List<Version> downloads) -> OptionalConsumer.of(downloadResolver.resolve(downloads, p.name()))
                                             .ifPresent(v -> {
-                                                record(details, p.uname(), v.getPlatform());
+                                                record(details, p.id(), v.getPlatform());
                                                 ctx.redirect(302, v.getUrl());
                                             })
                                             .ifNotPresent(() -> ctx.clientError(404))))
@@ -49,11 +52,11 @@ public class DownloadHandler implements Handler {
         ).ifNotPresent(() -> ctx.clientError(404));
     }
 
-    private void record(RequestDetails details, String uname, String platform) {
+    private void record(RequestDetails details, String identifier, String platform) {
         try {
             auditRepo.record(
                     AuditEntry.of(COMMAND, details.getCandidate(), details.getVersion(), details.getHost(),
-                            details.getAgent(), uname, platform));
+                            details.getAgent(), identifier, platform));
         } catch (Exception e) {
             LOG.error("Unable record audit entry: " + details + " - " + e.getMessage());
         }

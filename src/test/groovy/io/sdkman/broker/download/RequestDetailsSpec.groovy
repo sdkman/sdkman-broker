@@ -7,7 +7,7 @@ import ratpack.path.PathTokens
 import ratpack.util.MultiValueMap
 import spock.lang.Specification
 
-public class RequestDetailsSpec extends Specification {
+class RequestDetailsSpec extends Specification {
 
     void "should extract platform query parameter"() {
         given:
@@ -34,7 +34,7 @@ public class RequestDetailsSpec extends Specification {
 
         then:
         details.isPresent()
-        details.get().uname == "darwin"
+        details.get().platform == "darwin"
     }
 
     void "should extract platform path token"() {
@@ -63,7 +63,7 @@ public class RequestDetailsSpec extends Specification {
 
         then:
         details.isPresent()
-        details.get().uname == "darwin"
+        details.get().platform == "darwin"
     }
 
     void "should return empty optional if candidate not present on request"() {

@@ -15,21 +15,21 @@ public enum Platform {
     WINDOWS_64(newArrayList("CYGWIN", "MINGW64", "MSYS")),
     SUN_OS(newArrayList("SunOS"));
 
-    List<String> unames;
+    List<String> ids;
 
-    Platform(List<String> uname) {
-        this.unames = uname;
+    Platform(List<String> ids) {
+        this.ids = ids;
     }
 
-    public static Optional<Platform> of(String uname) {
-        return Optional.ofNullable(uname)
+    public static Optional<Platform> of(String id) {
+        return Optional.ofNullable(id)
                 .map(String::toLowerCase)
-                .flatMap(u -> stream(Platform.values())
-                        .filter(p -> p.unames.stream().map(String::toLowerCase).anyMatch(u::startsWith))
+                .flatMap(pid -> stream(Platform.values())
+                        .filter(platform -> platform.ids.stream().map(String::toLowerCase).anyMatch(pid::startsWith))
                         .findFirst());
     }
 
-    public String uname() {
-        return unames.get(0);
+    public String id() {
+        return ids.get(0);
     }
 }

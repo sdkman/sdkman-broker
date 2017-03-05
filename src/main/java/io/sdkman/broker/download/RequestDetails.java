@@ -8,24 +8,25 @@ import ratpack.util.MultiValueMap;
 import java.util.Map;
 import java.util.Optional;
 
+@SuppressWarnings("WeakerAccess")
 public class RequestDetails {
 
-    public static final String PLATFORM_PARAMETER_NAME = "platform";
-    public static final String CANDIDATE_PARAMETER_NAME = "candidate";
-    public static final String VERSION_PARAMETER_NAME = "version";
+    private static final String PLATFORM_PARAMETER_NAME = "platform";
+    private static final String CANDIDATE_PARAMETER_NAME = "candidate";
+    private static final String VERSION_PARAMETER_NAME = "version";
 
     private final String candidate;
     private final String version;
     private final String host;
     private final String agent;
-    private final String uname;
+    private final String platform;
 
-    private RequestDetails(String candidate, String version, String host, String agent, String uname) {
+    private RequestDetails(String candidate, String version, String host, String agent, String platform) {
         this.candidate = candidate;
         this.version = version;
         this.host = host;
         this.agent = agent;
-        this.uname = uname;
+        this.platform = platform;
     }
 
     public static Optional<RequestDetails> of(Context ctx) {
@@ -79,8 +80,8 @@ public class RequestDetails {
         return agent;
     }
 
-    public String getUname() {
-        return uname;
+    public String getPlatform() {
+        return platform;
     }
 
     @Override
@@ -90,7 +91,7 @@ public class RequestDetails {
                 ", version='" + version + '\'' +
                 ", host='" + host + '\'' +
                 ", agent='" + agent + '\'' +
-                ", uname='" + uname + '\'' +
+                ", platform='" + platform + '\'' +
                 '}';
     }
 }
