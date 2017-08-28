@@ -3,6 +3,7 @@ package io.sdkman.broker.lang;
 import java.util.Optional;
 import java.util.function.Consumer;
 
+@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 public class OptionalConsumer<T> {
     private final Optional<T> optional;
 
