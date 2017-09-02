@@ -1,8 +1,10 @@
 package io.sdkman.broker;
 
+import io.sdkman.broker.audit.AuditRepo;
+import io.sdkman.broker.binary.BinaryDownloadConfig;
+import io.sdkman.broker.binary.BinaryDownloadHandler;
 import io.sdkman.broker.db.MongoConfig;
 import io.sdkman.broker.db.MongoProvider;
-import io.sdkman.broker.audit.AuditRepo;
 import io.sdkman.broker.download.DownloadHandler;
 import io.sdkman.broker.download.VersionRepo;
 import io.sdkman.broker.health.MongoHealthCheck;
@@ -20,10 +22,12 @@ public class Main {
         RatpackServer.start(spec -> spec
                 .serverConfig(c -> c
                         .props(asByteSource(getResource("version.properties")))
+                        .props(asByteSource(getResource("binary.properties")))
                         .env()
                         .sysProps()
                         .require("/broker", VersionConfig.class)
-                        .require("/mongo", MongoConfig.class))
+                        .require("/mongo", MongoConfig.class)
+                        .require("/binary", BinaryDownloadConfig.class))
                 .registry(Guice.registry(g -> g
                         .bind(MongoProvider.class)
                         .bind(MongoHealthCheck.class)
@@ -31,10 +35,12 @@ public class Main {
                         .bind(VersionHandler.class)
                         .bind(AuditRepo.class)
                         .bind(VersionRepo.class)
-                        .bind(DownloadHandler.class)))
+                        .bind(DownloadHandler.class)
+                        .bind(BinaryDownloadHandler.class)))
                 .handlers(chain -> chain
                         .get("health/:name?", HealthCheckHandler.class)
                         .get("version", VersionHandler.class)
+                        .get("download/sdkman/:version/:platform", BinaryDownloadHandler.class)
                         .get("download/:candidate/:version/:platform", DownloadHandler.class)
                         .get("download/:candidate/:version", DownloadHandler.class)));
     }
