@@ -1,18 +1,8 @@
 package steps
 
-import cucumber.api.DataTable
 import wslite.rest.RESTClientException
 
 import static cucumber.api.groovy.EN.And
-
-And(~/^a download request is made on "(.*)" with query parameters:$/) { String path, DataTable params ->
-    def query = params.asMap(String, String)
-    try {
-        response = httpClient.get(path: path, followRedirects: false, query: query)
-    } catch (RESTClientException rce) {
-        response = rce.response
-    }
-}
 
 And(~/^a binary resource for "(.*)" is hosted at "(.*)"$/) { String name, String url  ->
     //nothing to do

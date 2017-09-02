@@ -40,7 +40,7 @@ public class Main {
                 .handlers(chain -> chain
                         .get("health/:name?", HealthCheckHandler.class)
                         .get("version", VersionHandler.class)
-                        .get("download/sdkman/:version/:platform", BinaryDownloadHandler.class)
+                        .get("download/sdkman/:command/:version/:platform", BinaryDownloadHandler.class)
                         .get("download/:candidate/:version/:platform", DownloadHandler.class)
                         .get("download/:candidate/:version", DownloadHandler.class)));
     }
