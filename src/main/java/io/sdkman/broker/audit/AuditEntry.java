@@ -67,7 +67,7 @@ public class AuditEntry {
     }
 
     public static AuditEntry of(String command, String candidate, String version,
-                                String host, String agent, String uname, String platform) {
-        return new AuditEntry(command, candidate, version, host, agent, uname, platform);
+                                String host, String agent, String platform, String dist) {
+        return new AuditEntry(command, candidate, version, host, agent, platform, dist);
     }
 }

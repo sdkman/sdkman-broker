@@ -52,11 +52,12 @@ public class DownloadHandler implements Handler {
         ).ifNotPresent(() -> ctx.clientError(404));
     }
 
-    private void record(RequestDetails details, String identifier, String platform) {
+    private void record(RequestDetails details, String platform, String dist) {
         try {
             auditRepo.record(
-                    AuditEntry.of(COMMAND, details.getCandidate(), details.getVersion(), details.getHost(),
-                            details.getAgent(), identifier, platform));
+                    AuditEntry.of(
+                            COMMAND, details.getCandidate(), details.getVersion(), details.getHost(),
+                            details.getAgent(), platform, dist));
         } catch (Exception e) {
             LOG.error("Unable record audit entry: " + details + " - " + e.getMessage());
         }
