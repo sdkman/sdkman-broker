@@ -7,7 +7,7 @@ import ratpack.path.PathTokens
 import ratpack.util.MultiValueMap
 import spock.lang.Specification
 
-class RequestDetailsSpec extends Specification {
+class CandidateDownloadRequestDetailsSpec extends Specification {
 
     void "should extract platform query parameter"() {
         given:
@@ -30,7 +30,7 @@ class RequestDetailsSpec extends Specification {
         request.getQueryParams() >> queryParams
 
         when:
-        Optional<RequestDetails> details = RequestDetails.of(ctx)
+        def details = CandidateDownloadHandler.RequestDetails.of(ctx)
 
         then:
         details.isPresent()
@@ -59,7 +59,7 @@ class RequestDetailsSpec extends Specification {
         request.getQueryParams() >> queryParams
 
         when:
-        Optional<RequestDetails> details = RequestDetails.of(ctx)
+        def details = CandidateDownloadHandler.RequestDetails.of(ctx)
 
         then:
         details.isPresent()
@@ -86,7 +86,7 @@ class RequestDetailsSpec extends Specification {
         request.getQueryParams() >> queryParams
 
         when:
-        Optional<RequestDetails> details = RequestDetails.of(ctx)
+        def details = CandidateDownloadHandler.RequestDetails.of(ctx)
 
         then:
         !details.isPresent()
@@ -112,7 +112,7 @@ class RequestDetailsSpec extends Specification {
         request.getQueryParams() >> queryParams
 
         when:
-        Optional<RequestDetails> details = RequestDetails.of(ctx)
+        def details = CandidateDownloadHandler.RequestDetails.of(ctx)
 
         then:
         !details.isPresent()
@@ -138,11 +138,9 @@ class RequestDetailsSpec extends Specification {
         request.getQueryParams() >> queryParams
 
         when:
-        Optional<RequestDetails> details = RequestDetails.of(ctx)
+        def details = CandidateDownloadHandler.RequestDetails.of(ctx)
 
         then:
         !details.isPresent()
     }
-
-
 }

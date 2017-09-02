@@ -6,7 +6,7 @@ import ratpack.http.Request
 import ratpack.path.PathTokens
 import spock.lang.Specification
 
-class RequestDetailsSpec extends Specification {
+class BinaryDownloadRequestDetailsSpec extends Specification {
     def "should extract all relevant path segments and headers to an optional details"() {
         given:
         def pathTokens = Mock(PathTokens)
@@ -26,7 +26,7 @@ class RequestDetailsSpec extends Specification {
         ctx.getRequest() >> request
 
         when:
-        def maybeDetails = RequestDetails.of(ctx)
+        def maybeDetails = BinaryDownloadHandler.RequestDetails.of(ctx)
 
         then:
         maybeDetails.isPresent()
@@ -61,7 +61,7 @@ class RequestDetailsSpec extends Specification {
         ctx.getRequest() >> request
 
         when:
-        def maybeDetails = RequestDetails.of(ctx)
+        def maybeDetails = BinaryDownloadHandler.RequestDetails.of(ctx)
 
         then:
         !maybeDetails.isPresent()
@@ -86,7 +86,7 @@ class RequestDetailsSpec extends Specification {
         ctx.getRequest() >> request
 
         when:
-        def maybeDetails = RequestDetails.of(ctx)
+        def maybeDetails = BinaryDownloadHandler.RequestDetails.of(ctx)
 
         then:
         !maybeDetails.isPresent()
@@ -111,7 +111,7 @@ class RequestDetailsSpec extends Specification {
         ctx.getRequest() >> request
 
         when:
-        def maybeDetails = RequestDetails.of(ctx)
+        def maybeDetails = BinaryDownloadHandler.RequestDetails.of(ctx)
 
         then:
         !maybeDetails.isPresent()
