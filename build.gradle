@@ -57,7 +57,7 @@ sourceSets {
 assemble.dependsOn shadowJar
 
 task funtest(type: Test) {
-  testClassesDir = sourceSets.funtest.output.classesDir
+  testClassesDirs = sourceSets.funtest.output.classesDirs
   classpath = sourceSets.funtest.runtimeClasspath
 }
 
