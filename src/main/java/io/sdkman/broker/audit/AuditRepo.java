@@ -36,6 +36,6 @@ public class AuditRepo {
         basicDbObject.append("dist", auditEntry.getDist());
         basicDbObject.append("timestamp", auditEntry.getTimestamp());
         collection.insertOne(basicDbObject);
-        LOG.info("Logged: " + auditEntry);
+        LOG.debug("Logged: " + auditEntry);
     }
 }
