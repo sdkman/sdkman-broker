@@ -58,14 +58,10 @@ public class CandidateDownloadHandler implements Handler {
     }
 
     private void record(RequestDetails details, String platform, String dist) {
-        try {
-            auditRepo.record(
-                    AuditEntry.of(
-                            COMMAND, details.getCandidate(), details.getVersion(), details.getHost(),
-                            details.getAgent(), platform, dist));
-        } catch (Exception e) {
-            LOG.error("Unable record audit entry: " + details + " - " + e.getMessage());
-        }
+        auditRepo.record(
+                AuditEntry.of(
+                        COMMAND, details.getCandidate(), details.getVersion(), details.getHost(),
+                        details.getAgent(), platform, dist));
     }
 
     public static class RequestDetails {

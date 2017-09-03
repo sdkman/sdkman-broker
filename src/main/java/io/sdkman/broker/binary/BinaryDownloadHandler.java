@@ -49,14 +49,10 @@ public class BinaryDownloadHandler implements Handler {
     }
 
     private void record(RequestDetails details, String platform) {
-        try {
-            auditRepo.record(
-                    AuditEntry.of(
-                            details.getCommand(), "sdkman", details.getVersion(), details.getHost(),
-                            details.getAgent(), platform, "UNIVERSAL"));
-        } catch (Exception e) {
-            LOG.error("Unable record audit entry: " + details + " - " + e.getMessage());
-        }
+        auditRepo.record(
+                AuditEntry.of(
+                        details.getCommand(), "sdkman", details.getVersion(), details.getHost(),
+                        details.getAgent(), platform, "UNIVERSAL"));
     }
 
     public static class RequestDetails {
