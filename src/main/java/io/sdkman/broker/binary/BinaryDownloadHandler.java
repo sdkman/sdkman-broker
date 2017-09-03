@@ -17,7 +17,7 @@ import java.util.Optional;
 
 public class BinaryDownloadHandler implements Handler {
 
-    private final static Logger LOG = LoggerFactory.getLogger(BinaryDownloadHandler.class);
+    private static final Logger logger = LoggerFactory.getLogger(BinaryDownloadHandler.class);
 
     private final BinaryDownloadConfig config;
     private final AuditRepo auditRepo;
@@ -31,7 +31,7 @@ public class BinaryDownloadHandler implements Handler {
     @Override
     public void handle(Context ctx) throws Exception {
         OptionalConsumer.of(RequestDetails.of(ctx)).ifPresent(details -> {
-                    LOG.info("Received download request for: {}" + details);
+                    logger.info("Received download request for: " + details);
                     record(details, inferPlatform(details.getPlatform()));
                     ctx.redirect(String.format(prepareRemoteBinaryUrl(), details.getVersion()));
                 }
@@ -95,9 +95,9 @@ public class BinaryDownloadHandler implements Handler {
 
         private static boolean isValidRequest(Context ctx) {
             PathTokens tokens = ctx.getAllPathTokens();
-            return tokens.get("command") != null
-                    && tokens.get("version") != null
-                    && tokens.get("platform") != null;
+            return tokens.get(COMMAND_TOKEN_NAME) != null
+                    && tokens.get(VERSION_TOKEN_NAME) != null
+                    && tokens.get(PLATFORM_TOKEN_NAME) != null;
         }
 
         public String getCommand() {

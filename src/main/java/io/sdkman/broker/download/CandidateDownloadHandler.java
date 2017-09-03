@@ -20,7 +20,7 @@ import java.util.Optional;
 @Singleton
 public class CandidateDownloadHandler implements Handler {
 
-    private final static Logger LOG = LoggerFactory.getLogger(CandidateDownloadHandler.class);
+    private static final Logger logger = LoggerFactory.getLogger(CandidateDownloadHandler.class);
 
     private static final String COMMAND = "install";
 
@@ -38,7 +38,7 @@ public class CandidateDownloadHandler implements Handler {
     @Override
     public void handle(Context ctx) throws Exception {
         OptionalConsumer.of(RequestDetails.of(ctx)).ifPresent(details -> {
-                    LOG.info("Received download request for: {}" + details);
+                    logger.info("Received download request for: " + details);
                     OptionalConsumer.of(Platform.of(details.getPlatform()))
                             .ifPresent(p -> versionRepo
                                     .fetch(details.getCandidate(), details.getVersion())
