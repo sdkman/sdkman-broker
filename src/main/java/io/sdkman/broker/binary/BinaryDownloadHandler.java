@@ -60,6 +60,13 @@ public class BinaryDownloadHandler implements Handler {
     }
 
     public static class RequestDetails {
+
+        private static final String COMMAND_TOKEN_NAME = "command";
+        private static final String VERSION_TOKEN_NAME = "version";
+        private static final String PLATFORM_TOKEN_NAME = "platform";
+        private static final String HOST_HEADER_NAME = "X-Real-IP";
+        private static final String AGENT_HEADER_NAME = "user-agent";
+
         private final String command;
         private final String version;
         private final String platform;
@@ -82,11 +89,11 @@ public class BinaryDownloadHandler implements Handler {
                 PathTokens tokens = ctx.getAllPathTokens();
                 return Optional.of(
                         new RequestDetails(
-                                tokens.get("command"),
-                                tokens.get("version"),
-                                tokens.get("platform"),
-                                headers.get("X-Real-IP"),
-                                headers.get("user-agent")));
+                                tokens.get(COMMAND_TOKEN_NAME),
+                                tokens.get(VERSION_TOKEN_NAME),
+                                tokens.get(PLATFORM_TOKEN_NAME),
+                                headers.get(HOST_HEADER_NAME),
+                                headers.get(AGENT_HEADER_NAME)));
             } else {
                 return Optional.empty();
             }
