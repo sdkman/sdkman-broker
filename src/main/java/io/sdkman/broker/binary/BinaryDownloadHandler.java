@@ -30,12 +30,10 @@ public class BinaryDownloadHandler implements Handler {
 
     @Override
     public void handle(Context ctx) throws Exception {
-        OptionalConsumer.of(RequestDetails.of(ctx)).ifPresent(d -> {
-                    LOG.info("Received " + d.getCommand() + " download request for: sdkman " +
-                            " " + d.getVersion() + " " + d.getPlatform());
-
-                    record(d, inferPlatform(d.getPlatform()));
-                    ctx.redirect(String.format(prepareRemoteBinaryUrl(), d.getVersion()));
+        OptionalConsumer.of(RequestDetails.of(ctx)).ifPresent(details -> {
+                    LOG.info("Received download request for: {}" + details);
+                    record(details, inferPlatform(details.getPlatform()));
+                    ctx.redirect(String.format(prepareRemoteBinaryUrl(), details.getVersion()));
                 }
         ).ifNotPresent(() -> ctx.clientError(400));
     }
@@ -45,7 +43,7 @@ public class BinaryDownloadHandler implements Handler {
     }
 
     private String inferPlatform(String platform) {
-        return Platform.of(platform).map(Platform::id).orElse("n/a");
+        return Platform.of(platform).map(Platform::id).orElse("not defined");
     }
 
     private void record(RequestDetails details, String platform) {
@@ -120,6 +118,17 @@ public class BinaryDownloadHandler implements Handler {
 
         public String getAgent() {
             return agent;
+        }
+
+        @Override
+        public String toString() {
+            return "RequestDetails{" +
+                    "command='" + command + '\'' +
+                    ", version='" + version + '\'' +
+                    ", platform='" + platform + '\'' +
+                    ", host='" + host + '\'' +
+                    ", agent='" + agent + '\'' +
+                    '}';
         }
     }
 }

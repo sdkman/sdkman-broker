@@ -38,11 +38,7 @@ public class CandidateDownloadHandler implements Handler {
     @Override
     public void handle(Context ctx) throws Exception {
         OptionalConsumer.of(RequestDetails.of(ctx)).ifPresent(details -> {
-                    LOG.info("Received download request for: "
-                            + details.getCandidate() + " "
-                            + details.getVersion() + " "
-                            + details.getPlatform());
-
+                    LOG.info("Received download request for: {}" + details);
                     OptionalConsumer.of(Platform.of(details.getPlatform()))
                             .ifPresent(p -> versionRepo
                                     .fetch(details.getCandidate(), details.getVersion())
