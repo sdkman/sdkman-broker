@@ -4,7 +4,7 @@ buildscript {
   }
   dependencies {
     classpath "io.ratpack:ratpack-gradle:1.5.0"
-    classpath "com.github.jengelman.gradle.plugins:shadow:1.2.3"
+    classpath "com.github.jengelman.gradle.plugins:shadow:2.0.1"
   }
 }
 
@@ -29,8 +29,8 @@ dependencies {
   compile "org.mongodb:mongo-java-driver:3.2.2"
   compile "org.slf4j:slf4j-simple:1.7.5"
 
-  testCompile "org.codehaus.groovy:groovy-all:2.4.7"
-  testCompile "org.spockframework:spock-core:1.0-groovy-2.4"
+  testCompile "org.codehaus.groovy:groovy-all:2.4.9"
+  testCompile "org.spockframework:spock-core:1.1-groovy-2.4"
   testRuntime "cglib:cglib-nodep:3.1"
   testRuntime "org.objenesis:objenesis:2.1"
 
