@@ -1,86 +1,39 @@
 package io.sdkman.broker.health
 
-import com.mongodb.client.FindIterable
-import com.mongodb.client.MongoCollection
-import com.mongodb.client.MongoDatabase
-import io.sdkman.broker.db.MongoProvider
-import org.bson.Document
+import io.sdkman.broker.app.AppRepo
+import ratpack.exec.Promise
 import ratpack.test.exec.ExecHarness
 import spock.lang.AutoCleanup
 import spock.lang.Specification
 
-import static io.sdkman.broker.health.MongoHealthCheck.*
+import static io.sdkman.broker.health.MongoHealthCheck.UNHEALTHY_MESSAGE
 
 class MongoHealthCheckSpec extends Specification {
 
     @AutoCleanup
     ExecHarness execHarness = ExecHarness.harness()
 
-    def mongo = Mock(MongoDatabase)
+    def appRepo = Mock(AppRepo)
 
-    def mongoProvider = Mock(MongoProvider)
-
-    def mongoHealthCheck = new MongoHealthCheck(mongoProvider)
+    def mongoHealthCheck = new MongoHealthCheck(appRepo)
 
     void "should be healthy for live database and well formed populated schema"() {
         given:
-        def document = Mock(Document)
-        document.getString(FIELD_NAME) >> FIELD_VALUE
-
-        def documents = Mock(FindIterable)
-        documents.first() >> document
-
-        def collection = Mock(MongoCollection)
-        mongoProvider.database() >> mongo
-        mongo.getCollection(COLLECTION_NAME) >> collection
-        collection.find({ it.fieldName == FIELD_NAME && it.value == FIELD_VALUE }) >> documents
+        appRepo.healthCheck() >> Promise.value(Optional.of("OK"))
 
         when:
-        mongoHealthCheck.check(null)
         def result = execHarness.yieldSingle {
             mongoHealthCheck.check(null)
         }.value
 
         then:
         result.healthy
-        !result.message
+        result.message == "OK"
     }
 
     void "should be unhealthy for live database and no or malformed schema"() {
         given:
-        def documents = Mock(FindIterable)
-        documents.first() >> null
-
-        def collection = Mock(MongoCollection)
-        mongoProvider.database() >> mongo
-        mongo.getCollection(COLLECTION_NAME) >> collection
-        collection.find({ it.fieldName == FIELD_NAME && it.value == FIELD_VALUE }) >> documents
-
-        when:
-        mongoHealthCheck.check(null)
-        def result = execHarness.yieldSingle {
-            mongoHealthCheck.check(null)
-        }.value
-
-        then:
-        !result.healthy
-        !result.error
-        result.message == UNHEALTHY_MESSAGE
-    }
-
-    void "should be unhealthy for live database with schema and missing data"() {
-        given:
-        def document = Mock(Document)
-        def incorrectValue = "KO"
-        document.getString(FIELD_NAME) >> incorrectValue
-
-        def documents = Mock(FindIterable)
-        documents.first() >> document
-
-        def collection = Mock(MongoCollection)
-        mongoProvider.database() >> mongo
-        mongo.getCollection(COLLECTION_NAME) >> collection
-        collection.find({ it.fieldName == FIELD_NAME && it.value == FIELD_VALUE }) >> documents
+        appRepo.healthCheck() >> Promise.value(Optional.empty())
 
         when:
         mongoHealthCheck.check(null)
