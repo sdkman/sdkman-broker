@@ -16,7 +16,7 @@ And(~/^a download request is made on "(.*)"$/) { String path ->
     }
 }
 
-And(~/^a request is made for "(.*)"$/) { String path ->
+And(~/^a GET request is made for "(.*)"$/) { String path ->
     try {
         response = httpClient.get(path: path)
     } catch (RESTClientException rce) {
@@ -28,9 +28,17 @@ And(~/^the service response status is (\d+)$/) { int status ->
     assert response.statusCode == status
 }
 
+And(~/^the content type is "(.*)"$/) { String contentType ->
+    assert response.contentType == contentType
+}
+
 And(~/^a redirect to "(.*)" is returned/) { String url ->
     assert response.statusCode == 302
     assert response.headers['Location'] == url
+}
+
+And(~/^the response is "(.*)"$/) { String txt ->
+    assert response.text == txt
 }
 
 And(~/^the response contains (.*) as (.*)$/) { String key, String value ->

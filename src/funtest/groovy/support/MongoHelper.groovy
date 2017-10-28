@@ -21,11 +21,27 @@ class MongoHelper {
         mongo.getDatabase("sdkman")
     }
 
-    static insertAliveInDb(MongoDatabase db){
+    static insertAliveInDb(MongoDatabase db) {
         def collection  = db.getCollection("application", BasicDBObject)
         def basicDbObject = new BasicDBObject()
         basicDbObject.append("_id", id.getAndIncrement().toString())
         basicDbObject.append("alive", "OK")
+        collection.insertOne(basicDbObject)
+    }
+
+    static insertStableCliVersionInDb(MongoDatabase db, String version) {
+        def collection  = db.getCollection("application", BasicDBObject)
+        def basicDbObject = new BasicDBObject()
+        basicDbObject.append("_id", id.getAndIncrement().toString())
+        basicDbObject.append("stableCliVersion", version)
+        collection.insertOne(basicDbObject)
+    }
+
+    static insertBetaCliVersionInDb(MongoDatabase db, String version) {
+        def collection  = db.getCollection("application", BasicDBObject)
+        def basicDbObject = new BasicDBObject()
+        basicDbObject.append("_id", id.getAndIncrement().toString())
+        basicDbObject.append("betaCliVersion", version)
         collection.insertOne(basicDbObject)
     }
 

@@ -39,3 +39,11 @@ And(~/^an audit entry for (.*) (.*) (.*) is not recorded for (.*)$/) { String ca
         readAuditEntry(db, candidate, version, distribution, platform).ifPresent { x -> new CucumberException("Audit entry found for $candidate $version $distribution for $platform") }
     }
 }
+
+And(~/^the Stable CLI version is "(.*)"$/) { String version ->
+    insertStableCliVersionInDb(db, version)
+}
+
+And(~/^the Beta CLI version is "(.*)"$/) { String version ->
+    insertBetaCliVersionInDb(db, version)
+}

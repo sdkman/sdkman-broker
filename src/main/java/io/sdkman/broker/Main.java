@@ -3,6 +3,7 @@ package io.sdkman.broker;
 import io.sdkman.broker.audit.AuditRepo;
 import io.sdkman.broker.binary.BinaryDownloadConfig;
 import io.sdkman.broker.binary.BinaryDownloadHandler;
+import io.sdkman.broker.binary.BinaryVersionHandler;
 import io.sdkman.broker.db.MongoConfig;
 import io.sdkman.broker.db.MongoProvider;
 import io.sdkman.broker.download.CandidateDownloadHandler;
@@ -36,10 +37,12 @@ public class Main {
                         .bind(AuditRepo.class)
                         .bind(VersionRepo.class)
                         .bind(CandidateDownloadHandler.class)
+                        .bind(BinaryVersionHandler.class)
                         .bind(BinaryDownloadHandler.class)))
                 .handlers(chain -> chain
                         .get("health/:name?", HealthCheckHandler.class)
                         .get("version", VersionHandler.class)
+                        .get("download/sdkman/version/:versionType", BinaryVersionHandler.class)
                         .get("download/sdkman/:command/:version/:platform", BinaryDownloadHandler.class)
                         .get("download/:candidate/:version/:platform", CandidateDownloadHandler.class)
                         .get("download/:candidate/:version", CandidateDownloadHandler.class)));

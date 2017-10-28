@@ -3,8 +3,6 @@ package io.sdkman.broker.audit;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.mongodb.BasicDBObject;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
 import io.sdkman.broker.db.MongoProvider;
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;

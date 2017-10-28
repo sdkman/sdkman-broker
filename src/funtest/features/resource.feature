@@ -6,3 +6,16 @@ Feature: Resource
     Then a redirect to "https://bintray.com/artifact/download/sdkman/generic/sdkman-cli-5.5.11+256.zip" is returned
     And an audit entry for sdkman 5.5.11+256 UNIVERSAL is recorded for Darwin
 
+  Scenario: Read the current Stable SDKMAN binary resource version
+    Given the Stable CLI version is "5.5.5+145"
+    When a GET request is made for "/download/sdkman/version/stable"
+    Then the service response status is 200
+    And the content type is "text/plain"
+    And the response is "5.5.5+145"
+
+  Scenario: Read the current Beta SDKMAN binary resource version
+    Given the Beta CLI version is "master+146"
+    When a GET request is made for "/download/sdkman/version/beta"
+    Then the service response status is 200
+    And the content type is "text/plain"
+    And the response is "master+146"
