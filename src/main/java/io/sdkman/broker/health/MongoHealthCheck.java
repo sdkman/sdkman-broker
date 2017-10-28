@@ -2,7 +2,7 @@ package io.sdkman.broker.health;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import io.sdkman.broker.app.ApplicationRepo;
+import io.sdkman.broker.app.AppRepo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ratpack.exec.Promise;
@@ -12,17 +12,17 @@ import ratpack.registry.Registry;
 @Singleton
 public class MongoHealthCheck implements HealthCheck {
 
-    private final static Logger LOG = LoggerFactory.getLogger(MongoHealthCheck.class);
+    private final static Logger logger = LoggerFactory.getLogger(MongoHealthCheck.class);
 
     public static final String COLLECTION_NAME = "application";
     public static final String FIELD_NAME = "alive";
     public static final String FIELD_VALUE = "OK";
     public static final String UNHEALTHY_MESSAGE = "Nothing found at application/alive in database.";
 
-    private final ApplicationRepo appRepo;
+    private final AppRepo appRepo;
 
     @Inject
-    public MongoHealthCheck(ApplicationRepo appRepo) {
+    public MongoHealthCheck(AppRepo appRepo) {
         this.appRepo = appRepo;
     }
 
@@ -33,7 +33,7 @@ public class MongoHealthCheck implements HealthCheck {
 
     @Override
     public Promise<Result> check(Registry registry) throws Exception {
-        LOG.info("Healthcheck request received.");
+        logger.info("Healthcheck request received.");
         return appRepo.healthCheck()
                 .map(os -> os
                         .map(Result::healthy)

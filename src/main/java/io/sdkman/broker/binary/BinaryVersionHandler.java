@@ -1,6 +1,6 @@
 package io.sdkman.broker.binary;
 
-import io.sdkman.broker.app.ApplicationRepo;
+import io.sdkman.broker.app.AppRepo;
 import io.sdkman.broker.lang.OptionalConsumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,18 +12,21 @@ import java.util.Optional;
 
 public class BinaryVersionHandler implements Handler {
 
+    private static final String VERSION_TYPE_TOKEN = "versionType";
+
     private static final Logger logger = LoggerFactory.getLogger(BinaryDownloadHandler.class);
 
-    private final ApplicationRepo appRepo;
+    private final AppRepo appRepo;
 
     @Inject
-    public BinaryVersionHandler(ApplicationRepo appRepo) {
+    public BinaryVersionHandler(AppRepo appRepo) {
         this.appRepo = appRepo;
     }
 
     @Override
     public void handle(Context ctx) throws Exception {
-        OptionalConsumer.of(Optional.ofNullable(ctx.getPathTokens().get("versionType")))
+        logger.info("Received request for SDKMAN binary: {}", ctx.getPathTokens().get(VERSION_TYPE_TOKEN));
+        OptionalConsumer.of(Optional.ofNullable(ctx.getPathTokens().get(VERSION_TYPE_TOKEN)))
                 .ifPresent(versionType ->
                         appRepo.findVersion(versionType).then(version ->
                                 OptionalConsumer.of(Optional.ofNullable(version))

@@ -13,7 +13,7 @@ import java.util.Optional;
 import static com.mongodb.client.model.Filters.eq;
 
 @Singleton
-public class ApplicationRepo {
+public class AppRepo {
 
     private static final String APPLICATION_COLLECTION_NAME = "application";
     private static final String ALIVE_FIELD_NAME = "alive";
@@ -21,12 +21,12 @@ public class ApplicationRepo {
     private static final String STABLE_VERSION_FIELD_NAME = "stableCliVersion";
     private static final String BETA_VERSION_FIELD_NAME = "betaCliVersion";
 
-    private final static Logger LOG = LoggerFactory.getLogger(ApplicationRepo.class);
+    private final static Logger LOG = LoggerFactory.getLogger(AppRepo.class);
 
     private MongoProvider mongoProvider;
 
     @Inject
-    public ApplicationRepo(MongoProvider mongoProvider) {
+    public AppRepo(MongoProvider mongoProvider) {
         this.mongoProvider = mongoProvider;
     }
 
