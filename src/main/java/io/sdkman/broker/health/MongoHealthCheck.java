@@ -2,20 +2,12 @@ package io.sdkman.broker.health;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
-import io.sdkman.broker.db.MongoProvider;
-import org.bson.Document;
+import io.sdkman.broker.app.ApplicationRepo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ratpack.exec.Blocking;
 import ratpack.exec.Promise;
 import ratpack.health.HealthCheck;
 import ratpack.registry.Registry;
-
-import java.util.Optional;
-
-import static com.mongodb.client.model.Filters.eq;
 
 @Singleton
 public class MongoHealthCheck implements HealthCheck {
@@ -27,11 +19,11 @@ public class MongoHealthCheck implements HealthCheck {
     public static final String FIELD_VALUE = "OK";
     public static final String UNHEALTHY_MESSAGE = "Nothing found at application/alive in database.";
 
-    private final MongoProvider mongoProvider;
+    private final ApplicationRepo appRepo;
 
     @Inject
-    public MongoHealthCheck(MongoProvider mongoProvider) {
-        this.mongoProvider = mongoProvider;
+    public MongoHealthCheck(ApplicationRepo appRepo) {
+        this.appRepo = appRepo;
     }
 
     @Override
@@ -41,17 +33,10 @@ public class MongoHealthCheck implements HealthCheck {
 
     @Override
     public Promise<Result> check(Registry registry) throws Exception {
-        return Blocking.get(() -> {
-            MongoDatabase mongo = mongoProvider.database();
-            MongoCollection<Document> collection = mongo.getCollection(COLLECTION_NAME);
-            Result result = Optional.ofNullable(collection.find(eq(FIELD_NAME, FIELD_VALUE)).first())
-                    .filter(first -> FIELD_VALUE.equals(first.getString(FIELD_NAME)))
-                    .map(r -> Result.healthy())
-                    .orElse(Result.unhealthy(UNHEALTHY_MESSAGE));
-            LOG.info("Health check performed - healthy: " + result.isHealthy() +
-                    ", message: " + Optional.ofNullable(result.getMessage()).orElse("nothing to report"));
-            return result;
-        });
+        LOG.info("Healthcheck request received.");
+        return appRepo.healthCheck()
+                .map(os -> os
+                        .map(Result::healthy)
+                        .orElse(Result.unhealthy(UNHEALTHY_MESSAGE)));
     }
-
 }

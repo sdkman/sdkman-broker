@@ -7,7 +7,7 @@ import io.sdkman.broker.binary.BinaryVersionHandler;
 import io.sdkman.broker.db.MongoConfig;
 import io.sdkman.broker.db.MongoProvider;
 import io.sdkman.broker.download.CandidateDownloadHandler;
-import io.sdkman.broker.download.VersionRepo;
+import io.sdkman.broker.version.VersionRepo;
 import io.sdkman.broker.health.MongoHealthCheck;
 import io.sdkman.broker.version.VersionConfig;
 import io.sdkman.broker.version.VersionHandler;

@@ -1,4 +1,4 @@
-package io.sdkman.broker.download;
+package io.sdkman.broker.version;
 
 public class Version {
     private final String candidate;

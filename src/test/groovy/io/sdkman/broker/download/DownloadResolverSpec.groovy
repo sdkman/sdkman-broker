@@ -1,5 +1,6 @@
 package io.sdkman.broker.download
 
+import io.sdkman.broker.version.Version
 import spock.lang.Specification
 
 class DownloadResolverSpec extends Specification {

@@ -1,4 +1,4 @@
-package io.sdkman.broker.download;
+package io.sdkman.broker.version;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;

@@ -1,5 +1,7 @@
 package io.sdkman.broker.download;
 
+import io.sdkman.broker.version.Version;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

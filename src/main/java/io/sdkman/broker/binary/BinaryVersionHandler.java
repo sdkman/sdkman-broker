@@ -1,5 +1,6 @@
 package io.sdkman.broker.binary;
 
+import io.sdkman.broker.app.ApplicationRepo;
 import io.sdkman.broker.lang.OptionalConsumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
