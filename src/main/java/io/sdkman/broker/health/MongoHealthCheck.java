@@ -12,12 +12,9 @@ import ratpack.registry.Registry;
 @Singleton
 public class MongoHealthCheck implements HealthCheck {
 
-    private final static Logger logger = LoggerFactory.getLogger(MongoHealthCheck.class);
-
-    public static final String COLLECTION_NAME = "application";
-    public static final String FIELD_NAME = "alive";
-    public static final String FIELD_VALUE = "OK";
     public static final String UNHEALTHY_MESSAGE = "Nothing found at application/alive in database.";
+
+    private static final Logger logger = LoggerFactory.getLogger(MongoHealthCheck.class);
 
     private final AppRepo appRepo;
 
