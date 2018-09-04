@@ -8,9 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ratpack.handling.Context;
 import ratpack.handling.Handler;
-import ratpack.http.Headers;
-import ratpack.http.Request;
-import ratpack.path.PathTokens;
 
 import javax.inject.Inject;
 import java.util.Optional;
@@ -76,11 +73,11 @@ public class BinaryDownloadHandler implements Handler {
         }
 
         public static Optional<RequestDetails> of(Context ctx) {
-            Request request = ctx.getRequest();
-            Headers headers = request.getHeaders();
+            var request = ctx.getRequest();
+            var headers = request.getHeaders();
 
             if (isValidRequest(ctx)) {
-                PathTokens tokens = ctx.getAllPathTokens();
+                var tokens = ctx.getAllPathTokens();
                 return Optional.of(
                         new RequestDetails(
                                 tokens.get(COMMAND_TOKEN_NAME),
@@ -94,7 +91,7 @@ public class BinaryDownloadHandler implements Handler {
         }
 
         private static boolean isValidRequest(Context ctx) {
-            PathTokens tokens = ctx.getAllPathTokens();
+            var tokens = ctx.getAllPathTokens();
             return tokens.get(COMMAND_TOKEN_NAME) != null
                     && tokens.get(VERSION_TOKEN_NAME) != null
                     && tokens.get(PLATFORM_TOKEN_NAME) != null;

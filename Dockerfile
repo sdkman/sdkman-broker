@@ -1,4 +1,4 @@
-FROM java:8
+FROM java:10
 
 MAINTAINER Marco Vermeulen
 

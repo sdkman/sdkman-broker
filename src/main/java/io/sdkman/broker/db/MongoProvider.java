@@ -11,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
-import java.util.List;
 
 @Singleton
 public class MongoProvider {
@@ -29,18 +28,18 @@ public class MongoProvider {
 
     private MongoClient mongo() {
         LOG.info("Initialising mongo client.");
-        ServerAddress serverAddress = new ServerAddress(mongoConfig.getHost(), mongoConfig.getPort());
-        MongoClientOptions clientOptions = MongoClientOptions.builder()
+        var serverAddress = new ServerAddress(mongoConfig.getHost(), mongoConfig.getPort());
+        var clientOptions = MongoClientOptions.builder()
                 .serverSelectionTimeout(mongoConfig.getServerSelectionTimeout())
                 .connectTimeout(mongoConfig.getConnectionTimeout())
                 .socketTimeout(mongoConfig.getSocketTimeout())
                 .build();
         if (mongoConfig.getUsername() != null && mongoConfig.getPassword() != null) {
-            MongoCredential credential = MongoCredential.createCredential(
+            var credential = MongoCredential.createCredential(
                     mongoConfig.getUsername(),
                     mongoConfig.getDbName(),
                     mongoConfig.getPassword().toCharArray());
-            List<MongoCredential> credentials = new ArrayList<MongoCredential>() {{
+            var credentials = new ArrayList<MongoCredential>() {{
                 add(credential);
             }};
 

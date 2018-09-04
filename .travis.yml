@@ -2,6 +2,8 @@ sudo: required
 services:
   - docker
 language: java
+jdk:
+  - openjdk10
 before_install:
   - docker login -e="$DOCKER_EMAIL" -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
   - docker run -d --net=host mongo:latest
@@ -11,9 +13,13 @@ script:
   - "./gradlew check --stacktrace"
 after_success:
   - docker push sdkman/sdkman-broker:1.0.0-SNAPSHOT
+before_cache:
+- rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+- rm -fr $HOME/.gradle/caches/*/plugin-resolution/
 cache:
   directories:
-  - "$HOME/.gradle"
+  - $HOME/.gradle/caches/
+  - $HOME/.gradle/wrapper/
 # blacklist
 branches:
   except:
