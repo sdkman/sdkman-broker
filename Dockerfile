@@ -1,4 +1,4 @@
-FROM openjdk:10
+FROM java:8
 
 MAINTAINER Marco Vermeulen
 

@@ -13,6 +13,7 @@ import ratpack.handling.Context;
 import ratpack.handling.Handler;
 import ratpack.http.Request;
 import ratpack.path.PathTokens;
+import ratpack.util.MultiValueMap;
 
 import java.util.List;
 import java.util.Map;
@@ -82,8 +83,8 @@ public class CandidateDownloadHandler implements Handler {
         }
 
         public static Optional<RequestDetails> of(Context ctx) {
-            var pathTokens = ctx.getAllPathTokens();
-            var request = ctx.getRequest();
+            PathTokens pathTokens = ctx.getAllPathTokens();
+            Request request = ctx.getRequest();
             if (isValidRequest(ctx)) {
                 return Optional.of(
                         new RequestDetails(
@@ -98,8 +99,8 @@ public class CandidateDownloadHandler implements Handler {
         }
 
         private static boolean isValidRequest(Context ctx) {
-            var pathTokens = ctx.getAllPathTokens();
-            var queryParams = ctx.getRequest().getQueryParams();
+            PathTokens pathTokens = ctx.getAllPathTokens();
+            MultiValueMap<String, String> queryParams = ctx.getRequest().getQueryParams();
             return isParameterPresentIn(pathTokens, CANDIDATE_PARAMETER_NAME) &&
                     isParameterPresentIn(pathTokens, VERSION_PARAMETER_NAME) &&
                     isParameterPresentIn(pathTokens, PLATFORM_PARAMETER_NAME) ||
