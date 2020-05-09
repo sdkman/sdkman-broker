@@ -3,7 +3,6 @@ package io.sdkman.broker.binary;
 import io.sdkman.broker.audit.AuditEntry;
 import io.sdkman.broker.audit.AuditRepo;
 import io.sdkman.broker.download.Platform;
-import io.sdkman.broker.lang.OptionalConsumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ratpack.handling.Context;
@@ -30,12 +29,11 @@ public class BinaryDownloadHandler implements Handler {
 
     @Override
     public void handle(Context ctx) throws Exception {
-        OptionalConsumer.of(RequestDetails.of(ctx)).ifPresent(details -> {
-                    logger.info("Received download request for: " + details);
-                    record(details, inferPlatform(details.getPlatform()));
-                    ctx.redirect(String.format(prepareRemoteBinaryUrl(), details.getVersion()));
-                }
-        ).ifNotPresent(() -> ctx.clientError(400));
+        RequestDetails.of(ctx).ifPresentOrElse(details -> {
+            logger.info("Received download request for: " + details);
+            record(details, inferPlatform(details.getPlatform()));
+            ctx.redirect(String.format(prepareRemoteBinaryUrl(), details.getVersion()));
+        }, () -> ctx.clientError(400));
     }
 
     private String prepareRemoteBinaryUrl() {

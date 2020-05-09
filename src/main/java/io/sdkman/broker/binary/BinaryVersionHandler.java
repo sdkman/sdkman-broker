@@ -1,7 +1,6 @@
 package io.sdkman.broker.binary;
 
 import io.sdkman.broker.app.AppRepo;
-import io.sdkman.broker.lang.OptionalConsumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ratpack.handling.Context;
@@ -26,12 +25,16 @@ public class BinaryVersionHandler implements Handler {
     @Override
     public void handle(Context ctx) throws Exception {
         logger.info("Received request for SDKMAN binary: {}", ctx.getPathTokens().get(VERSION_TYPE_TOKEN));
-        OptionalConsumer.of(Optional.ofNullable(ctx.getPathTokens().get(VERSION_TYPE_TOKEN)))
-                .ifPresent(versionType ->
-                        appRepo.findVersion(versionType).then(version ->
-                                OptionalConsumer.of(Optional.ofNullable(version))
-                                        .ifPresent(ctx::render)
-                                        .ifNotPresent(() -> ctx.clientError(404))))
-                .ifNotPresent(() -> ctx.clientError(400));
+        Optional.ofNullable(ctx.getPathTokens().get(VERSION_TYPE_TOKEN))
+                .ifPresentOrElse(versionType ->
+                                appRepo.findVersion(versionType).then(version ->
+                                        Optional.ofNullable(version)
+                                                .ifPresentOrElse(ctx::render, clientError(ctx, 404))),
+                        clientError(ctx, 400));
     }
+
+    private Runnable clientError(Context ctx, int code) {
+        return () -> ctx.clientError(code);
+    }
+
 }

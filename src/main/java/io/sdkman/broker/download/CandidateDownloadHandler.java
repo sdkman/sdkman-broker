@@ -4,7 +4,6 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import io.sdkman.broker.audit.AuditEntry;
 import io.sdkman.broker.audit.AuditRepo;
-import io.sdkman.broker.lang.OptionalConsumer;
 import io.sdkman.broker.version.Version;
 import io.sdkman.broker.version.VersionRepo;
 import org.slf4j.Logger;
@@ -26,9 +25,9 @@ public class CandidateDownloadHandler implements Handler {
 
     private static final String COMMAND = "install";
 
-    private VersionRepo versionRepo;
-    private AuditRepo auditRepo;
-    private DownloadResolver downloadResolver;
+    private final VersionRepo versionRepo;
+    private final AuditRepo auditRepo;
+    private final DownloadResolver downloadResolver;
 
     @Inject
     public CandidateDownloadHandler(VersionRepo versionRepo, AuditRepo auditRepo, DownloadResolver downloadResolver) {
@@ -39,20 +38,23 @@ public class CandidateDownloadHandler implements Handler {
 
     @Override
     public void handle(Context ctx) throws Exception {
-        OptionalConsumer.of(RequestDetails.of(ctx)).ifPresent(details -> {
-                    logger.info("Received download request for: " + details);
-                    OptionalConsumer.of(Platform.of(details.getPlatform()))
-                            .ifPresent(p -> versionRepo
+        RequestDetails.of(ctx).ifPresentOrElse(details -> {
+            logger.info("Received download request for: " + details);
+            Platform.of(details.getPlatform())
+                    .ifPresentOrElse(p -> versionRepo
                                     .fetch(details.getCandidate(), details.getVersion())
-                                    .then((List<Version> downloads) -> OptionalConsumer.of(downloadResolver.resolve(downloads, p.name()))
-                                            .ifPresent(v -> {
-                                                record(details, p.id(), v.getPlatform());
-                                                ctx.redirect(302, v.getUrl());
-                                            })
-                                            .ifNotPresent(() -> ctx.clientError(404))))
-                            .ifNotPresent(() -> ctx.clientError(400));
-                }
-        ).ifNotPresent(() -> ctx.clientError(404));
+                                    .then((List<Version> downloads) ->
+                                            downloadResolver.resolve(downloads, p.name())
+                                                    .ifPresentOrElse(v -> {
+                                                        record(details, p.id(), v.getPlatform());
+                                                        ctx.redirect(302, v.getUrl());
+                                                    }, clientError(ctx, 404))),
+                            clientError(ctx, 400));
+        }, clientError(ctx, 404));
+    }
+
+    private Runnable clientError(Context ctx, int code) {
+        return () -> ctx.clientError(code);
     }
 
     private void record(RequestDetails details, String platform, String dist) {
@@ -113,7 +115,7 @@ public class CandidateDownloadHandler implements Handler {
                     request.getQueryParams().get(PLATFORM_PARAMETER_NAME).toLowerCase();
         }
 
-        private static boolean isParameterPresentIn(Map map, String key) {
+        private static boolean isParameterPresentIn(Map<String, String> map, String key) {
             return map.get(key) != null;
         }
 
