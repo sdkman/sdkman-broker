@@ -29,6 +29,16 @@ class PlatformSpec extends Specification {
         Platform.of("Linux32").get() == Platform.LINUX_32
     }
 
+    void "should resolve LinuxARM64 uname as arm 64 bit linux"() {
+        expect:
+        Platform.of("LinuxARM64").get() == Platform.LINUX_ARM64
+    }
+
+    void "should resolve LinuxARM32 uname as arm 32 bit linux"() {
+        expect:
+        Platform.of("LinuxARM32").get() == Platform.LINUX_ARM32
+    }
+
     void "should resolve sun os uname as sunos"() {
         expect:
         Platform.of("SunOS").get() == Platform.SUN_OS
