@@ -12,7 +12,7 @@ public class DownloadResolver {
     public static final String UNIVERSAL_PLATFORM = "UNIVERSAL";
 
     public Optional<Version> resolve(List<Version> versions, String platform) {
-        Map<String, Version> versionMap = new HashMap<String, Version>() {{
+        Map<String, Version> versionMap = new HashMap<>() {{
             versions.forEach(v -> put(v.getPlatform(), v));
         }};
 
