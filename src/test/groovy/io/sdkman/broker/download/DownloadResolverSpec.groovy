@@ -26,8 +26,8 @@ class DownloadResolverSpec extends Specification {
 
     void "should resolve a platform specific binary if an appropriate version is found"() {
         given:
-        def platform = "LINUX"
-        def linuxVersion = new Version("java", "1.8.0", "https://someurl/bleeh/blah/bloo", "LINUX")
+        def platform = "LINUX_64"
+        def linuxVersion = new Version("java", "1.8.0", "https://someurl/bleeh/blah/bloo", "LINUX_64")
         def macVersion = new Version("java", "1.8.0", "https://someurl/bleeh/blah/bloo", "MAC_OSX")
         def versions = [linuxVersion, macVersion]
 
@@ -42,7 +42,7 @@ class DownloadResolverSpec extends Specification {
     void "should return empty if no matching platform is found"() {
         given:
         def platform = "FREE_BSD"
-        def linuxVersion = new Version("java", "1.8.0", "https://someurl/bleeh/blah/bloo", "LINUX")
+        def linuxVersion = new Version("java", "1.8.0", "https://someurl/bleeh/blah/bloo", "LINUX_64")
         def macVersion = new Version("java", "1.8.0", "https://someurl/bleeh/blah/bloo", "MAC_OSX")
         def versions = [linuxVersion, macVersion]
 

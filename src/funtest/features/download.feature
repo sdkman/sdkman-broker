@@ -4,21 +4,21 @@ Feature: Download a Candidate Version
 		Given a valid UNIVERSAL binary for groovy 2.4.7 hosted at http://dl.bintray.com/groovy/maven/apache-groovy-binary-2.4.7.zip
 		When a download request is made on "/download/groovy/2.4.7/linux"
 		Then a redirect to "http://dl.bintray.com/groovy/maven/apache-groovy-binary-2.4.7.zip" is returned
-		And an audit entry for groovy 2.4.7 UNIVERSAL is recorded for Linux
+		And an audit entry for groovy 2.4.7 UNIVERSAL is recorded for LinuxX64
 
 	Scenario: Download a specific binary for a supported platform
 		Given a valid MAC_OSX binary for java 8u101 hosted at http://download.oracle.com/otn-pub/java/jdk/8u101-b13/jdk-8u101-macosx-x64.dmg
 		And a valid LINUX_64 binary for java 8u101 hosted at http://download.oracle.com/otn-pub/java/jdk/8u101-b13/jdk-8u101-linux-x64.tar.gz
 		When a download request is made on "/download/java/8u101/darwin"
 		Then a redirect to "http://download.oracle.com/otn-pub/java/jdk/8u101-b13/jdk-8u101-macosx-x64.dmg" is returned
-		And an audit entry for java 8u101 MAC_OSX is recorded for Darwin
+		And an audit entry for java 8u101 MAC_OSX is recorded for DarwinX64
 
 	Scenario: Download a specialised binary for a platform architecture
 		Given a valid LINUX_32 binary for java 8u101 hosted at http://download.oracle.com/otn-pub/java/jdk/8u101-b13/jdk-8u101-linux-i386.tar.gz
 		And a valid LINUX_64 binary for java 8u101 hosted at http://download.oracle.com/otn-pub/java/jdk/8u101-b13/jdk-8u101-linux-x64.tar.gz
-		When a download request is made on "/download/java/8u101/linux32"
+		When a download request is made on "/download/java/8u101/LinuxX32"
 		Then a redirect to "http://download.oracle.com/otn-pub/java/jdk/8u101-b13/jdk-8u101-linux-i386.tar.gz" is returned
-		When a download request is made on "/download/java/8u101/linux64"
+		When a download request is made on "/download/java/8u101/LinuxX64"
 		Then a redirect to "http://download.oracle.com/otn-pub/java/jdk/8u101-b13/jdk-8u101-linux-x64.tar.gz" is returned
 
 	Scenario: Download a specific binary for an unsupported platform

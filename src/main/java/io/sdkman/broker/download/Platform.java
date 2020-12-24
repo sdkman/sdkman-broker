@@ -10,11 +10,12 @@ public enum Platform {
     FREE_BSD(newArrayList("FreeBSD")),
     LINUX_ARM32(newArrayList("LinuxARM32")),
     LINUX_ARM64(newArrayList("LinuxARM64")),
-    LINUX_32(newArrayList("Linux32")),
-    LINUX_64(newArrayList("Linux", "Linux64")),
-    MAC_OSX(newArrayList("Darwin")),
-    WINDOWS_32(newArrayList("MINGW32")),
-    WINDOWS_64(newArrayList("CYGWIN", "MINGW64", "MSYS")),
+    LINUX_32(newArrayList("LinuxX32", "Linux32")),
+    LINUX_64(newArrayList("LinuxX64", "Linux64", "Linux")),
+    MAC_ARM64(newArrayList("DarwinARM64")),
+    MAC_OSX(newArrayList("DarwinX64", "Darwin")),
+    WINDOWS_X32(newArrayList("MINGW32")),
+    WINDOWS_X64(newArrayList("CYGWIN", "MINGW64", "MSYS")),
     SUN_OS(newArrayList("SunOS"));
 
     List<String> ids;
