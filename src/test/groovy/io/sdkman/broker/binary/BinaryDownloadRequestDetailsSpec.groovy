@@ -92,7 +92,7 @@ class BinaryDownloadRequestDetailsSpec extends Specification {
         !maybeDetails.isPresent()
     }
 
-    def "should return an emtpy optional if platform path token is not populated"() {
+    def "should return an empty optional if platform path token is not populated"() {
         given:
         def pathTokens = Mock(PathTokens)
         pathTokens.get("command") >> "update"
