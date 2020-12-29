@@ -1,9 +1,9 @@
 package steps
 
-import cucumber.runtime.CucumberException
+import io.cucumber.core.exception.CucumberException
 import spock.util.concurrent.PollingConditions
 
-import static cucumber.api.groovy.EN.And
+import static io.cucumber.groovy.EN.*
 import static support.MongoHelper.*
 
 conditions = new PollingConditions(timeout: 10, initialDelay: 1.5, factor: 1.25)

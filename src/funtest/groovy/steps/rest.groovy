@@ -1,8 +1,7 @@
 package steps
 
 import wslite.rest.RESTClientException
-
-import static cucumber.api.groovy.EN.And
+import static io.cucumber.groovy.EN.*
 
 And(~/^a binary resource for "(.*)" is hosted at "(.*)"$/) { String name, String url  ->
     //nothing to do

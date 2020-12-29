@@ -1,13 +1,11 @@
-import cucumber.api.CucumberOptions
-import cucumber.api.junit.Cucumber
+import io.cucumber.junit.Cucumber
+import io.cucumber.junit.CucumberOptions
 import org.junit.runner.RunWith
 
-@RunWith(Cucumber)
+@RunWith(Cucumber.class)
 @CucumberOptions(
-        format=["pretty", "html:build/reports/cucumber"],
-        strict=true,
-        features=["src/funtest/features"],
-        glue=["src/funtest/groovy"],
-        tags=["~@manual", "~@review", "~@pending"]
+        features = ["src/funtest/features"],
+        glue = ["steps"],
+        tags = "not @manual and not @review and not @pending"
 )
 class CukeRunner {}
