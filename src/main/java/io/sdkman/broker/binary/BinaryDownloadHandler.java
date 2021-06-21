@@ -32,7 +32,11 @@ public class BinaryDownloadHandler implements Handler {
         RequestDetails.of(ctx).ifPresentOrElse(details -> {
             logger.info("Received download request for: " + details);
             record(details, inferPlatform(details.getPlatform()));
-            ctx.redirect(String.format(prepareRemoteBinaryUrl(), details.getVersion()));
+            if (details.getVersion().startsWith("latest")) {
+                ctx.redirect(String.format(prepareRemoteBinaryUrl(), "latest", details.getVersion()));
+            } else {
+                ctx.redirect(String.format(prepareRemoteBinaryUrl(), details.getVersion(), details.getVersion()));
+            }
         }, () -> ctx.clientError(400));
     }
 

@@ -11,7 +11,7 @@ class BinaryDownloadRequestDetailsSpec extends Specification {
         given:
         def pathTokens = Mock(PathTokens)
         pathTokens.get("command") >> "install"
-        pathTokens.get("version") >> "5.5.11+256"
+        pathTokens.get("version") >> "5.5.11"
         pathTokens.get("platform") >> "darwin"
 
         def headers = Mock(Headers)
@@ -34,7 +34,7 @@ class BinaryDownloadRequestDetailsSpec extends Specification {
 
         and:
         details.command == "install"
-        details.version == "5.5.11+256"
+        details.version == "5.5.11"
         details.platform == "darwin"
 
         and:
@@ -46,7 +46,7 @@ class BinaryDownloadRequestDetailsSpec extends Specification {
         given:
         def pathTokens = Mock(PathTokens)
         pathTokens.get("command") >> null
-        pathTokens.get("version") >> "5.5.11+256"
+        pathTokens.get("version") >> "5.5.11"
         pathTokens.get("platform") >> "darwin"
 
         def headers = Mock(Headers)
@@ -96,7 +96,7 @@ class BinaryDownloadRequestDetailsSpec extends Specification {
         given:
         def pathTokens = Mock(PathTokens)
         pathTokens.get("command") >> "update"
-        pathTokens.get("version") >> "5.5.11+256"
+        pathTokens.get("version") >> "5.5.11"
         pathTokens.get("platform") >> null
 
         def headers = Mock(Headers)
