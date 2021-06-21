@@ -6,4 +6,4 @@ RUN mkdir /broker
 
 ADD build/libs /broker
 
-ENTRYPOINT java -Xmx128m -XX:+PrintFlagsFinal -jar /broker/sdkman-broker-1.0.0-SNAPSHOT-all.jar
+ENTRYPOINT java -Xmx128m -XX:+PrintFlagsFinal -jar /broker/sdkman-broker-1.7.0-all.jar
