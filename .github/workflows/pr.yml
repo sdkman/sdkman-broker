@@ -16,6 +16,8 @@ jobs:
         with:
           java-version: 11.0.11
       - name: Run application
+        env:
+          RATPACK_MONGO__HOST: "localhost"
         run: ./gradlew clean run &
       - name: Run tests
         run: ./gradlew check
