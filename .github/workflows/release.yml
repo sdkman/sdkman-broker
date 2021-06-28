@@ -20,6 +20,9 @@ jobs:
       run: ./gradlew clean check
     - name: Release
       run: ./gradlew final
+    - name: Set short git hash
+      id: var
+      run: echo "::set-output name=release_version::$(git tag --sort=committerdate | grep -E '^v[0-9]' | tail -1)"
     - name: Build Shadow Jar
       run: ./gradlew shadowJar
     - name: Log in to Docker Hub
@@ -29,8 +32,6 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
     - name: Push to Docker Hub
       uses: docker/build-push-action@v2
-      env:
-        RELEASE_VERSION: ${{ git tag --sort=taggerdate | grep -E '^v[0-9]' | tail -1 }}
       with:
         push: true
-        tags: "sdkman/sdkman-broker:$RELEASE_VERSION"
+        tags: sdkman/sdkman-broker:${{ steps.var.outputs.release_version }}
