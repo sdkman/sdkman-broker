@@ -1,7 +1,7 @@
 package io.sdkman.broker.db;
 
 public class MongoConfig {
-    private String host = "mongo";
+    private String host = "localhost";
     private int port = 27017;
     private String username = null;
     private String password = null;
