@@ -15,10 +15,6 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 11.0.11
-      - name: Run application
-        env:
-          RATPACK_MONGO__HOST: "localhost"
-        run: ./gradlew clean run &
       - name: Run tests
         run: ./gradlew check
       - uses: kentaro-m/auto-assign-action@v1.1.2
