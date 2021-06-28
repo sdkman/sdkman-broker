@@ -39,6 +39,7 @@ dependencies {
   testRuntime "cglib:cglib-nodep:3.1"
   testRuntime "org.objenesis:objenesis:2.1"
 
+  funTestCompile ratpack.dependency("test")
   funTestCompile "io.cucumber:cucumber-junit:6.1.1"
   funTestCompile "io.cucumber:cucumber-groovy:6.1.1"
   funTestCompile "com.github.groovy-wslite:groovy-wslite:1.1.2"
