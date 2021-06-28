@@ -4,6 +4,6 @@ MAINTAINER Marco Vermeulen
 
 RUN mkdir /broker
 
-ADD build/libs /broker
+ADD build/libs/sdkman-broker-*-all.jar /broker/sdkman-broker.jar
 
-ENTRYPOINT java -Xmx128m -XX:+PrintFlagsFinal -jar /broker/sdkman-broker-1.0.0-SNAPSHOT-all.jar
+ENTRYPOINT java -Xmx128m -XX:+PrintFlagsFinal -jar /broker/sdkman-broker.jar
