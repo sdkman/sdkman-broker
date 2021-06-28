@@ -1,13 +1,12 @@
 package steps
 
+import io.sdkman.broker.Main
+import ratpack.test.MainClassApplicationUnderTest
 import wslite.rest.RESTClient
 
 import static support.MongoHelper.clean
 import static support.MongoHelper.prepareDB
 import static io.cucumber.groovy.Hooks.*
-
-appBaseUrl = "http://localhost:5050"
-httpClient = new RESTClient(appBaseUrl)
 
 if(!binding.hasVariable("db")) {
     db = prepareDB()
@@ -16,4 +15,10 @@ if(!binding.hasVariable("db")) {
 
 Before() {
     clean(db)
+    embeddedApp = new MainClassApplicationUnderTest(Main.class)
+    httpClient = new RESTClient("${embeddedApp.address}")
+}
+
+After() {
+    embeddedApp.close()
 }
