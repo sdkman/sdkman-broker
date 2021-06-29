@@ -16,6 +16,8 @@ jobs:
           - 27017:27017
     steps:
     - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
     - name: Run checks
       run: ./gradlew clean check
     - name: Release
