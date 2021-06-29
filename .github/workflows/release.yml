@@ -19,9 +19,7 @@ jobs:
     - name: Run checks
       run: ./gradlew clean check
     - name: Release
-      with:
-        repo-token: ${{ secrets.GITHUB_TOKEN }}
-      run: ./gradlew final
+      run: ./gradlew -Dorg.ajoberstar.grgit.auth.username=USER -Dorg.ajoberstar.grgit.auth.password=${{ secrets.GITHUB_TOKEN }} final
     - name: Set short git hash
       id: var
       run: echo "::set-output name=release_version::$(git tag --sort=committerdate | grep -E '^v[0-9]' | tail -1)"
