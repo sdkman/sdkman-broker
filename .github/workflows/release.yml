@@ -24,7 +24,7 @@ jobs:
       run: ./gradlew -Dorg.ajoberstar.grgit.auth.username=USER -Dorg.ajoberstar.grgit.auth.password=${{ secrets.GITHUB_TOKEN }} final
     - name: Set release version
       id: var
-      run: echo "::set-output name=release_version::$(git tag --sort=taggerdate | grep -E '^v[0-9]' | tail -1)"
+      run: echo "::set-output name=release_version::$(git tag --sort=taggerdate | grep -E '^v[0-9]' | tail -1 | cut -c2-)"
     - name: Build Shadow Jar
       run: ./gradlew clean shadowJar
     - name: Log in to Docker Hub
