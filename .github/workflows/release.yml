@@ -26,7 +26,7 @@ jobs:
       id: var
       run: echo "::set-output name=release_version::$(git tag --sort=committerdate | grep -E '^v[0-9]' | tail -1)"
     - name: Build Shadow Jar
-      run: ./gradlew shadowJar
+      run: ./gradlew clean shadowJar
     - name: Log in to Docker Hub
       run: |
         docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
