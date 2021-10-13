@@ -3,10 +3,12 @@ package io.sdkman.broker.version;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import io.sdkman.broker.db.MongoProvider;
+import io.sdkman.repos.Version;
 import ratpack.exec.Blocking;
 import ratpack.exec.Promise;
 
 import java.util.List;
+import scala.Some;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static com.mongodb.client.model.Filters.and;
@@ -34,7 +36,9 @@ public class VersionRepo {
                         .map(doc -> new Version(
                                 candidate,
                                 version,
+                                doc.getString("platform"),
                                 doc.getString("url"),
-                                doc.getString("platform")))));
+                                Some.apply(doc.getString("vendor")),
+                                Some.apply(doc.getBoolean("visible"))))));
     }
 }
