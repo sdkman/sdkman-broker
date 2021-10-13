@@ -4,8 +4,8 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import io.sdkman.broker.audit.AuditEntry;
 import io.sdkman.broker.audit.AuditRepo;
-import io.sdkman.broker.version.Version;
 import io.sdkman.broker.version.VersionRepo;
+import io.sdkman.repos.Version;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ratpack.handling.Context;
@@ -37,17 +37,17 @@ public class CandidateDownloadHandler implements Handler {
     }
 
     @Override
-    public void handle(Context ctx) throws Exception {
+    public void handle(Context ctx) {
         RequestDetails.of(ctx).ifPresentOrElse(details -> {
-            logger.info("Received download request for: " + details);
+            logger.info("Received download request for: {}", details);
             Platform.of(details.getPlatform())
                     .ifPresentOrElse(p -> versionRepo
                                     .fetch(details.getCandidate(), details.getVersion())
                                     .then((List<Version> downloads) ->
                                             downloadResolver.resolve(downloads, p.name())
                                                     .ifPresentOrElse(v -> {
-                                                        record(details, p.id(), v.getPlatform());
-                                                        ctx.redirect(302, v.getUrl());
+                                                        audit(details, p.id(), v.platform());
+                                                        ctx.redirect(302, v.url());
                                                     }, clientError(ctx, 404))),
                             clientError(ctx, 400));
         }, clientError(ctx, 404));
@@ -57,7 +57,7 @@ public class CandidateDownloadHandler implements Handler {
         return () -> ctx.clientError(code);
     }
 
-    private void record(RequestDetails details, String platform, String dist) {
+    private void audit(RequestDetails details, String platform, String dist) {
         auditRepo.record(
                 AuditEntry.of(
                         COMMAND, details.getCandidate(), details.getVersion(), details.getHost(),
@@ -90,8 +90,8 @@ public class CandidateDownloadHandler implements Handler {
             if (isValidRequest(ctx)) {
                 return Optional.of(
                         new RequestDetails(
-                                pathTokens.get("candidate"),
-                                pathTokens.get("version"),
+                                pathTokens.get(CANDIDATE_PARAMETER_NAME),
+                                pathTokens.get(VERSION_PARAMETER_NAME),
                                 request.getHeaders().get("X-Real-IP"),
                                 request.getHeaders().get("user-agent"),
                                 determineNormalisedPlatform(pathTokens, request)));
