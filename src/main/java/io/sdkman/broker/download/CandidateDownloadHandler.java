@@ -5,7 +5,7 @@ import com.google.inject.Singleton;
 import io.sdkman.broker.audit.AuditEntry;
 import io.sdkman.broker.audit.AuditRepo;
 import io.sdkman.broker.version.VersionRepo;
-import io.sdkman.repos.Version;
+import io.sdkman.model.Version;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ratpack.handling.Context;

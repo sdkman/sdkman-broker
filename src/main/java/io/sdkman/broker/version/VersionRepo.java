@@ -3,7 +3,7 @@ package io.sdkman.broker.version;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import io.sdkman.broker.db.MongoProvider;
-import io.sdkman.repos.Version;
+import io.sdkman.model.Version;
 import ratpack.exec.Blocking;
 import ratpack.exec.Promise;
 

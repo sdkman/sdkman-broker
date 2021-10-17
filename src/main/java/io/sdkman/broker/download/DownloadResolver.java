@@ -1,6 +1,6 @@
 package io.sdkman.broker.download;
 
-import io.sdkman.repos.Version;
+import io.sdkman.model.Version;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;

@@ -1,6 +1,6 @@
 package io.sdkman.broker.download
 
-import io.sdkman.repos.Version
+import io.sdkman.model.Version
 import scala.Option
 import scala.Some
 import spock.lang.Specification
@@ -29,7 +29,7 @@ class DownloadResolverSpec extends Specification {
     void "should resolve a platform specific binary if an appropriate version is found"() {
         given:
         def platform = "LINUX_64"
-        def linuxVersion = new Version("java", "1.8.0",  "LINUX_64", "https://someurl/bleeh/blah/bloo", Option.empty(), Some.apply(true))
+        def linuxVersion = new Version("java", "1.8.0", "LINUX_64", "https://someurl/bleeh/blah/bloo", Option.empty(), Some.apply(true))
         def macVersion = new Version("java", "1.8.0", "MAC_OSX", "https://someurl/bleeh/blah/bloo", Option.empty(), Some.apply(true))
         def versions = [linuxVersion, macVersion]
 
