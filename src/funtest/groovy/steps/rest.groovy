@@ -1,5 +1,6 @@
 package steps
 
+import io.sdkman.broker.download.CandidateDownloadHandler
 import wslite.rest.RESTClientException
 import static io.cucumber.groovy.EN.And
 
@@ -34,6 +35,12 @@ And(~/^the content type is "(.*)"$/) { String contentType ->
 And(~/^a redirect to "(.*)" is returned/) { String url ->
     assert response.statusCode == 302
     assert response.headers['Location'] == url
+}
+
+And(~/^a checksum "(.*)" for algorithm "(.*)" is returned/) { String checksum, String algorithm ->
+    String checksumHeaderKey = "${CandidateDownloadHandler.X_SDK_MAN_CHECKSUM}-${algorithm}"
+    assert response.headers.containsKey(checksumHeaderKey)
+    assert response.headers["${checksumHeaderKey}"] == checksum
 }
 
 And(~/^the response is "(.*)"$/) { String txt ->

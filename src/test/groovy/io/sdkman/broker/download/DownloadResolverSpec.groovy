@@ -15,7 +15,7 @@ class DownloadResolverSpec extends Specification {
         def url = "https://someurl/foo/bar/baz"
         def platform = "Linux"
 
-        def version = new Version(candidate, candidateVersion, "UNIVERSAL", url, Option.empty(), Some.apply(true))
+        def version = new Version(candidate, candidateVersion, "UNIVERSAL", url, Option.empty(), Some.apply(true), Option.empty())
         def versions = [version]
 
         when:
@@ -29,8 +29,8 @@ class DownloadResolverSpec extends Specification {
     void "should resolve a platform specific binary if an appropriate version is found"() {
         given:
         def platform = "LINUX_64"
-        def linuxVersion = new Version("java", "1.8.0", "LINUX_64", "https://someurl/bleeh/blah/bloo", Option.empty(), Some.apply(true))
-        def macVersion = new Version("java", "1.8.0", "MAC_OSX", "https://someurl/bleeh/blah/bloo", Option.empty(), Some.apply(true))
+        def linuxVersion = new Version("java", "1.8.0", "LINUX_64", "https://someurl/bleeh/blah/bloo", Option.empty(), Some.apply(true), Option.empty())
+        def macVersion = new Version("java", "1.8.0", "MAC_OSX", "https://someurl/bleeh/blah/bloo", Option.empty(), Some.apply(true), Option.empty())
         def versions = [linuxVersion, macVersion]
 
         when:
@@ -44,8 +44,8 @@ class DownloadResolverSpec extends Specification {
     void "should return empty if no matching platform is found"() {
         given:
         def platform = "FREE_BSD"
-        def linuxVersion = new Version("java", "1.8.0", "LINUX_64", "https://someurl/bleeh/blah/bloo", Option.empty(), Some.apply(true))
-        def macVersion = new Version("java", "1.8.0", "MAC_OSX", "https://someurl/bleeh/blah/bloo", Option.empty(), Some.apply(true))
+        def linuxVersion = new Version("java", "1.8.0", "LINUX_64", "https://someurl/bleeh/blah/bloo", Option.empty(), Some.apply(true), Option.empty())
+        def macVersion = new Version("java", "1.8.0", "MAC_OSX", "https://someurl/bleeh/blah/bloo", Option.empty(), Some.apply(true), Option.empty())
         def versions = [linuxVersion, macVersion]
 
         expect:

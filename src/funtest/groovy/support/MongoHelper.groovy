@@ -57,12 +57,27 @@ class MongoHelper {
         def collection  = db.getCollection("versions", BasicDBObject)
         def basicDbObject = new BasicDBObject()
         basicDbObject.append("_id", ObjectId.get())
-        basicDbObject.append("_class", "Version")
-        basicDbObject.append("candidate", candidate)
-        basicDbObject.append("version", version)
-        basicDbObject.append("platform", platform)
-        basicDbObject.append("url", target)
+            .append("_class", "Version")
+            .append("candidate", candidate)
+            .append("version", version)
+            .append("platform", platform)
+            .append("url", target)
         collection.insertOne(basicDbObject)
+    }
+
+    static addChecksumToVersionInDb(MongoDatabase db, String candidate, String version,
+                                    String platform, String algorithm, String checksum) {
+        def collection  = db.getCollection("versions", BasicDBObject)
+        def query = new BasicDBObject()
+            .append("candidate", candidate)
+            .append("version", version)
+            .append("platform", platform)
+
+        def existingDocument = collection.find(query).first()
+        existingDocument.putIfAbsent("checksums", new HashMap<String, String>())
+        ((Map) existingDocument.get("checksums")).put(algorithm, checksum)
+
+        collection.findOneAndReplace(query, existingDocument)
     }
 
     static readAuditEntry(MongoDatabase db, String candidate, String version, String distribution, String platform) {

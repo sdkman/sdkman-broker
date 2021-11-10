@@ -16,6 +16,11 @@ And(~/^a valid (.*) binary for (.*) (.*) hosted at (.*)$/) { String platform, St
     insertCandidateVersionInDb(db, candidate, version, platform, url)
 }
 
+And(~/^the binary for candidate (.*) (.*) on platform (.*) has a checksum (.*) using algorithm (.*)$/) {
+    String candidate, String version, String platform, String checksum, String algorithm ->
+    addChecksumToVersionInDb(db, candidate, version, platform, algorithm, checksum)
+}
+
 And(~/^an uninitialised database$/) { ->
     clean(db)
 }

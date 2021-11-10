@@ -56,3 +56,23 @@ Feature: Download a Candidate Version
     Given a Candidate groovy does not exist
     When a download request is made on "/download/groovy/linux"
     Then the service response status is 404
+
+  Scenario: Download a Universal binary with checksum info
+    Given a valid UNIVERSAL binary for groovy 2.4.7 hosted at http://dl.bintray.com/groovy/maven/apache-groovy-binary-2.4.7.zip
+    And the binary for candidate groovy 2.4.7 on platform UNIVERSAL has a checksum 6f1b9599f99393724ea134951aa605037178b63a using algorithm SHA-1
+    And the binary for candidate groovy 2.4.7 on platform UNIVERSAL has a checksum 438dd6098252647e88ff12ac5737d0d0f7e16a8e4e42e8be3e05a4c43abefbd5 using algorithm SHA-256
+    When a download request is made on "/download/groovy/2.4.7/linux"
+    Then a redirect to "http://dl.bintray.com/groovy/maven/apache-groovy-binary-2.4.7.zip" is returned
+    And a checksum "6f1b9599f99393724ea134951aa605037178b63a" for algorithm "SHA-1" is returned
+    And a checksum "438dd6098252647e88ff12ac5737d0d0f7e16a8e4e42e8be3e05a4c43abefbd5" for algorithm "SHA-256" is returned
+    And an audit entry for groovy 2.4.7 UNIVERSAL is recorded for LinuxX64
+
+  Scenario: Download a specific binary for a supported platform with checksum info
+    Given a valid MAC_OSX binary for java 8u101 hosted at http://download.oracle.com/otn-pub/java/jdk/8u101-b13/jdk-8u101-macosx-x64.dmg
+    And a valid LINUX_64 binary for java 8u101 hosted at http://download.oracle.com/otn-pub/java/jdk/8u101-b13/jdk-8u101-linux-x64.tar.gz
+    And the binary for candidate java 8u101 on platform MAC_OSX has a checksum MAC_OSXaa605037178b63a using algorithm SHA-1
+    And the binary for candidate java 8u101 on platform LINUX_64 has a checksum LINUX_64aa605037178b63a using algorithm SHA-1
+    When a download request is made on "/download/java/8u101/darwin"
+    Then a redirect to "http://download.oracle.com/otn-pub/java/jdk/8u101-b13/jdk-8u101-macosx-x64.dmg" is returned
+    And a checksum "MAC_OSXaa605037178b63a" for algorithm "SHA-1" is returned
+    And an audit entry for java 8u101 MAC_OSX is recorded for DarwinX64
