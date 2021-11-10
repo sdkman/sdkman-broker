@@ -5,7 +5,19 @@ import com.google.inject.Singleton;
 import io.sdkman.broker.audit.AuditEntry;
 import io.sdkman.broker.audit.AuditRepo;
 import io.sdkman.broker.version.VersionRepo;
+import io.sdkman.model.MD5;
+import io.sdkman.model.SHA1;
+import io.sdkman.model.SHA224;
+import io.sdkman.model.SHA256;
+import io.sdkman.model.SHA384;
+import io.sdkman.model.SHA512;
 import io.sdkman.model.Version;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.TreeMap;
+import java.util.function.Function;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ratpack.handling.Context;
@@ -13,17 +25,32 @@ import ratpack.handling.Handler;
 import ratpack.http.Request;
 import ratpack.path.PathTokens;
 import ratpack.util.MultiValueMap;
-
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import scala.collection.JavaConverters;
 
 @Singleton
 public class CandidateDownloadHandler implements Handler {
 
     private static final Logger logger = LoggerFactory.getLogger(CandidateDownloadHandler.class);
-
     private static final String COMMAND = "install";
+    private static final Comparator<String> ALGO_COMPARATOR =  Comparator.comparing((Function<String, Integer>) algorithm -> {
+        if (MD5.id().equals(algorithm)) {
+            return MD5.priority();
+        } else if (SHA1.id().equals(algorithm)) {
+            return SHA1.priority();
+        } else if (SHA224.id().equals(algorithm)) {
+            return SHA224.priority();
+        } else if (SHA256.id().equals(algorithm)) {
+            return SHA256.priority();
+        } else if (SHA384.id().equals(algorithm)) {
+            return SHA384.priority();
+        } else if (SHA512.id().equals(algorithm)) {
+            return SHA512.priority();
+        } else {
+            return 0;
+        }
+    }).reversed();
+
+    public static final String X_SDK_MAN_CHECKSUM = "X-SdkMan-Checksum";
 
     private final VersionRepo versionRepo;
     private final AuditRepo auditRepo;
@@ -47,10 +74,25 @@ public class CandidateDownloadHandler implements Handler {
                                             downloadResolver.resolve(downloads, p.name())
                                                     .ifPresentOrElse(v -> {
                                                         audit(details, p.id(), v.platform());
+                                                        v.checksums().foreach(v1 ->
+                                                            writeChecksumHeaders(ctx, v1));
+
                                                         ctx.redirect(302, v.url());
                                                     }, clientError(ctx, 404))),
                             clientError(ctx, 400));
         }, clientError(ctx, 404));
+    }
+
+    private scala.collection.immutable.Map<String, String> writeChecksumHeaders(Context ctx,
+        scala.collection.immutable.Map<String, String> checksums) {
+
+        Map<String, String> sortedChecksums = new TreeMap<>(ALGO_COMPARATOR);
+        sortedChecksums.putAll(JavaConverters.mapAsJavaMap(checksums));
+
+        sortedChecksums.forEach((algo, checksum) ->
+            ctx.header(String.format("%s-%s", X_SDK_MAN_CHECKSUM, algo), checksum));
+
+        return checksums;
     }
 
     private Runnable clientError(Context ctx, int code) {
