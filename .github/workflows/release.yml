@@ -9,11 +9,6 @@ jobs:
     name: "Stable Release"
     runs-on: ubuntu-latest
     environment: production
-    services:
-      mongodb:
-        image: mongo:3.2
-        ports:
-          - 27017:27017
     steps:
     - uses: actions/checkout@v2
       with:

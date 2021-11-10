@@ -5,6 +5,8 @@ import com.mongodb.MongoClient
 import com.mongodb.WriteConcern
 import com.mongodb.client.MongoDatabase
 import org.bson.types.ObjectId
+import org.testcontainers.containers.MongoDBContainer
+import org.testcontainers.utility.DockerImageName
 
 import java.util.concurrent.atomic.AtomicLong
 
@@ -16,7 +18,11 @@ class MongoHelper {
     static id = new AtomicLong()
 
     static prepareDB(){
-        def mongo = new MongoClient()
+        def mongoDBContainer = new MongoDBContainer(DockerImageName.parse("mongo:3.2"))
+        mongoDBContainer.setPortBindings(["27017:27017"])
+
+        mongoDBContainer.start()
+        def mongo = new MongoClient(mongoDBContainer.getHost(), mongoDBContainer.getFirstMappedPort())
         mongo.writeConcern = WriteConcern.UNACKNOWLEDGED
         mongo.getDatabase("sdkman")
     }
