@@ -5,6 +5,7 @@ import com.mongodb.MongoClient
 import com.mongodb.WriteConcern
 import com.mongodb.client.MongoDatabase
 import org.bson.types.ObjectId
+import scala.Option
 
 import java.util.concurrent.atomic.AtomicLong
 
@@ -15,14 +16,14 @@ class MongoHelper {
 
     static id = new AtomicLong()
 
-    static prepareDB(){
+    static prepareDB() {
         def mongo = new MongoClient()
         mongo.writeConcern = WriteConcern.UNACKNOWLEDGED
         mongo.getDatabase("sdkman")
     }
 
     static insertAliveInDb(MongoDatabase db) {
-        def collection  = db.getCollection("application", BasicDBObject)
+        def collection = db.getCollection("application", BasicDBObject)
         def basicDbObject = new BasicDBObject()
         basicDbObject.append("_id", id.getAndIncrement().toString())
         basicDbObject.append("alive", "OK")
@@ -30,7 +31,7 @@ class MongoHelper {
     }
 
     static insertStableCliVersionInDb(MongoDatabase db, String version) {
-        def collection  = db.getCollection("application", BasicDBObject)
+        def collection = db.getCollection("application", BasicDBObject)
         def basicDbObject = new BasicDBObject()
         basicDbObject.append("_id", id.getAndIncrement().toString())
         basicDbObject.append("stableCliVersion", version)
@@ -38,7 +39,7 @@ class MongoHelper {
     }
 
     static insertBetaCliVersionInDb(MongoDatabase db, String version) {
-        def collection  = db.getCollection("application", BasicDBObject)
+        def collection = db.getCollection("application", BasicDBObject)
         def basicDbObject = new BasicDBObject()
         basicDbObject.append("_id", id.getAndIncrement().toString())
         basicDbObject.append("betaCliVersion", version)
@@ -54,30 +55,33 @@ class MongoHelper {
     //  "url" : "http://dl.bintray.com/groovy/maven/apache-groovy-binary-2.4.7.zip"
     // }
     static insertCandidateVersionInDb(MongoDatabase db, String candidate, String version, String platform, String target) {
-        def collection  = db.getCollection("versions", BasicDBObject)
+        def collection = db.getCollection("versions", BasicDBObject)
         def basicDbObject = new BasicDBObject()
         basicDbObject.append("_id", ObjectId.get())
-            .append("_class", "Version")
-            .append("candidate", candidate)
-            .append("version", version)
-            .append("platform", platform)
-            .append("url", target)
+                .append("_class", "Version")
+                .append("candidate", candidate)
+                .append("version", version)
+                .append("platform", platform)
+                .append("url", target)
         collection.insertOne(basicDbObject)
     }
 
     static addChecksumToVersionInDb(MongoDatabase db, String candidate, String version,
                                     String platform, String algorithm, String checksum) {
-        def collection  = db.getCollection("versions", BasicDBObject)
+        def collection = db.getCollection("versions", BasicDBObject)
         def query = new BasicDBObject()
-            .append("candidate", candidate)
-            .append("version", version)
-            .append("platform", platform)
+                .append("candidate", candidate)
+                .append("version", version)
+                .append("platform", platform)
 
-        def existingDocument = collection.find(query).first()
-        existingDocument.putIfAbsent("checksums", new HashMap<String, String>())
-        ((Map) existingDocument.get("checksums")).put(algorithm, checksum)
-
-        collection.findOneAndReplace(query, existingDocument)
+        collection.find(query).collect { existingDocument ->
+            Option.apply(existingDocument.get("checksums")).map { checksums ->
+                checksums.put algorithm, checksum
+            }.orElse {
+                existingDocument.put("checksums", [(algorithm): checksum])
+            }
+            collection.findOneAndReplace(query, existingDocument)
+        }
     }
 
     static readAuditEntry(MongoDatabase db, String candidate, String version, String distribution, String platform) {

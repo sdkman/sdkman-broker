@@ -1,7 +1,7 @@
 package steps
 
-import io.sdkman.broker.download.CandidateDownloadHandler
 import wslite.rest.RESTClientException
+
 import static io.cucumber.groovy.EN.And
 
 And(~/^a binary resource for "(.*)" is hosted at "(.*)"$/) { String name, String url ->
@@ -37,8 +37,7 @@ And(~/^a redirect to "(.*)" is returned/) { String url ->
     assert response.headers['Location'] == url
 }
 
-And(~/^a checksum "(.*)" for algorithm "(.*)" is returned/) { String checksum, String algorithm ->
-    String checksumHeaderKey = "${CandidateDownloadHandler.X_SDK_MAN_CHECKSUM}-${algorithm}"
+And(~/^a checksum "(.*)" for header "(.*)" is returned/) { String checksum, String checksumHeaderKey ->
     assert response.headers.containsKey(checksumHeaderKey)
     assert response.headers["${checksumHeaderKey}"] == checksum
 }
