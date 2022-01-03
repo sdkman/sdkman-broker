@@ -20,7 +20,8 @@ class PlatformSpec extends Specification {
         "LinuxX32"            | Platform.LINUX_32
         "Linux32"             | Platform.LINUX_32
         "LinuxARM64"          | Platform.LINUX_ARM64
-        "LinuxARM32"          | Platform.LINUX_ARM32
+        "LinuxARM32SF"        | Platform.LINUX_ARM32SF
+        "LinuxARM32HF"        | Platform.LINUX_ARM32HF
 
         "Darwin"              | Platform.MAC_OSX
         "DarwinX64"           | Platform.MAC_OSX

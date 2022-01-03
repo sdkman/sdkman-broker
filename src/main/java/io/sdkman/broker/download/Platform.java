@@ -8,7 +8,8 @@ import static java.util.Arrays.stream;
 
 public enum Platform {
     FREE_BSD(newArrayList("FreeBSD")),
-    LINUX_ARM32(newArrayList("LinuxARM32")),
+    LINUX_ARM32SF(newArrayList("LinuxARM32SF")),
+    LINUX_ARM32HF(newArrayList("LinuxARM32HF")),
     LINUX_ARM64(newArrayList("LinuxARM64")),
     LINUX_32(newArrayList("LinuxX32", "Linux32")),
     LINUX_64(newArrayList("LinuxX64", "Linux64", "Linux")),

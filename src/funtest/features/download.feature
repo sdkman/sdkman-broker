@@ -11,7 +11,9 @@ Feature: Download a Candidate Version
       | MAC_ARM64      | /download/java/11.0.9-adpt/darwinarm64     | DarwinARM64    |
       | LINUX_64       | /download/java/11.0.9-adpt/linuxx64        | LinuxX64       |
       | LINUX_32       | /download/java/11.0.9-adpt/linuxx32        | LinuxX32       |
-      | LINUX_ARM32    | /download/java/11.0.9-adpt/linuxarm32      | LinuxARM32     |
+      | LINUX_ARM32SF  | /download/java/11.0.9-adpt/linuxarm32sf    | LinuxARM32SF   |
+      | LINUX_ARM32HF  | /download/java/11.0.9-adpt/linuxarm32hf    | LinuxARM32HF   |
+      | LINUX_ARM64    | /download/java/11.0.9-adpt/linuxarm64      | LinuxARM64   |
       | WINDOWS_64     | /download/java/11.0.9-adpt/msys_nt-10.0    | WindowsX64     |
       | WINDOWS_64     | /download/java/11.0.9-adpt/mingw64_nt-10.0 | WindowsX64     |
       | WINDOWS_64     | /download/java/11.0.9-adpt/cygwin_nt-10.0  | WindowsX64     |
