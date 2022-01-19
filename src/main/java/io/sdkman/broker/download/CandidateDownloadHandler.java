@@ -32,7 +32,7 @@ import scala.collection.JavaConverters;
 public class CandidateDownloadHandler implements Handler {
 
     private static final String COMMAND = "install";
-    private static final String X_SDK_MAN_CHECKSUM = "X-SdkMan-Checksum";
+    private static final String X_SDK_MAN_CHECKSUM = "X-Sdkman-Checksum";
     private static final Logger logger = LoggerFactory.getLogger(CandidateDownloadHandler.class);
     private static final Comparator<String> algoComparator =
             Comparator.comparing((Function<String, Integer>) algorithm -> {
