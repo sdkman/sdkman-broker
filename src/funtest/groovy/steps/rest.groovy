@@ -4,7 +4,7 @@ import wslite.rest.RESTClientException
 
 import static io.cucumber.groovy.EN.And
 
-And(~/^a binary resource for "(.*)" is hosted at "(.*)"$/) { String name, String url ->
+And(~/^a binary resource for SDKMAN "(.*)" is hosted at "(.*)"$/) { String name, String url ->
     //nothing to do
 }
 
