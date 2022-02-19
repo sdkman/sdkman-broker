@@ -32,7 +32,7 @@ dependencies {
   compile ratpack.dependency("guice")
   compile "org.mongodb:mongo-java-driver:3.2.2"
   compile "org.slf4j:slf4j-simple:1.7.5"
-  compile "com.github.sdkman:sdkman-persistent-model:1.1.0"
+  compile "com.github.sdkman:sdkman-persistent-model:1.1.1"
 
   testCompile "org.codehaus.groovy:groovy-all:2.4.19"
   testCompile "org.spockframework:spock-core:1.1-groovy-2.4"
