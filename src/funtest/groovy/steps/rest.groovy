@@ -8,6 +8,11 @@ And(~/^a binary resource for SDKMAN "(.*)" is hosted at "(.*)"$/) { String name,
     //nothing to do
 }
 
+And(~/^a native "(.*)" binary resource for SDKMAN "(.*)" is hosted at "(.*)"$/) {
+    String platform, String name, String url ->
+        //nothing to do
+}
+
 And(~/^a download request is made on "(.*)"$/) { String path ->
     try {
         response = httpClient.get(path: path, followRedirects: false)
