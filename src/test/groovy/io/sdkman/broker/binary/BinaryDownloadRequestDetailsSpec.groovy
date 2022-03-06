@@ -26,7 +26,7 @@ class BinaryDownloadRequestDetailsSpec extends Specification {
         ctx.getRequest() >> request
 
         when:
-        def maybeDetails = BinaryDownloadHandler.RequestDetails.of(ctx)
+        def maybeDetails = RequestDetails.of(ctx)
 
         then:
         maybeDetails.isPresent()
@@ -61,7 +61,7 @@ class BinaryDownloadRequestDetailsSpec extends Specification {
         ctx.getRequest() >> request
 
         when:
-        def maybeDetails = BinaryDownloadHandler.RequestDetails.of(ctx)
+        def maybeDetails = RequestDetails.of(ctx)
 
         then:
         !maybeDetails.isPresent()
@@ -86,7 +86,7 @@ class BinaryDownloadRequestDetailsSpec extends Specification {
         ctx.getRequest() >> request
 
         when:
-        def maybeDetails = BinaryDownloadHandler.RequestDetails.of(ctx)
+        def maybeDetails = RequestDetails.of(ctx)
 
         then:
         !maybeDetails.isPresent()
@@ -111,7 +111,7 @@ class BinaryDownloadRequestDetailsSpec extends Specification {
         ctx.getRequest() >> request
 
         when:
-        def maybeDetails = BinaryDownloadHandler.RequestDetails.of(ctx)
+        def maybeDetails = RequestDetails.of(ctx)
 
         then:
         !maybeDetails.isPresent()
