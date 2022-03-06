@@ -7,6 +7,8 @@ import io.sdkman.broker.binary.BinaryVersionHandler;
 import io.sdkman.broker.db.MongoConfig;
 import io.sdkman.broker.db.MongoProvider;
 import io.sdkman.broker.download.CandidateDownloadHandler;
+import io.sdkman.broker.rust.NativeBinaryDownloadConfig;
+import io.sdkman.broker.rust.NativeBinaryDownloadHandler;
 import io.sdkman.broker.version.VersionRepo;
 import io.sdkman.broker.health.MongoHealthCheck;
 import io.sdkman.broker.version.VersionConfig;
@@ -24,11 +26,13 @@ public class Main {
                 .serverConfig(c -> c
                         .props(asByteSource(getResource("version.properties")))
                         .props(asByteSource(getResource("binary.properties")))
+                        .props(asByteSource(getResource("native_binary.properties")))
                         .env()
                         .sysProps()
                         .require("/broker", VersionConfig.class)
                         .require("/mongo", MongoConfig.class)
-                        .require("/binary", BinaryDownloadConfig.class))
+                        .require("/binary", BinaryDownloadConfig.class)
+                        .require("/native", NativeBinaryDownloadConfig.class))
                 .registry(Guice.registry(g -> g
                         .bind(MongoProvider.class)
                         .bind(MongoHealthCheck.class)
@@ -38,12 +42,14 @@ public class Main {
                         .bind(VersionRepo.class)
                         .bind(CandidateDownloadHandler.class)
                         .bind(BinaryVersionHandler.class)
-                        .bind(BinaryDownloadHandler.class)))
+                        .bind(BinaryDownloadHandler.class)
+                        .bind(NativeBinaryDownloadHandler.class)))
                 .handlers(chain -> chain
                         .get("health/:name?", HealthCheckHandler.class)
                         .get("version", VersionHandler.class)
                         .get("download/sdkman/version/:versionType", BinaryVersionHandler.class)
                         .get("download/sdkman/:command/:version/:platform", BinaryDownloadHandler.class)
+                        .get("download/native/:command/:version/:platform", NativeBinaryDownloadHandler.class)
                         .get("download/:candidate/:version/:platform", CandidateDownloadHandler.class)
                         .get("download/:candidate/:version", CandidateDownloadHandler.class)));
     }
