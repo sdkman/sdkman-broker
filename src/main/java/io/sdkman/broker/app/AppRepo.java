@@ -20,6 +20,7 @@ public class AppRepo {
     private static final String ALIVE_FIELD_VALUE = "OK";
     private static final String STABLE_VERSION_FIELD_NAME = "stableCliVersion";
     private static final String BETA_VERSION_FIELD_NAME = "betaCliVersion";
+    private static final String STABLE_NATIVE_VERSION_FIELD_NAME = "stableNativeCliVersion";
 
     private final static Logger LOG = LoggerFactory.getLogger(AppRepo.class);
 
@@ -55,6 +56,8 @@ public class AppRepo {
         switch (typeIdentifier) {
             case "stable":
                 return STABLE_VERSION_FIELD_NAME;
+            case "stable_native":
+                return STABLE_NATIVE_VERSION_FIELD_NAME;
             case "beta":
                 return BETA_VERSION_FIELD_NAME;
             default:
