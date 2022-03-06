@@ -11,7 +11,7 @@ import java.util.Optional;
 
 public class BinaryVersionHandler implements Handler {
 
-    private static final String VERSION_TYPE_TOKEN = "versionType";
+    private static final String VERSION_TYPE_PATH_TOKEN = "versionType";
 
     private static final Logger logger = LoggerFactory.getLogger(BinaryDownloadHandler.class);
 
@@ -24,8 +24,8 @@ public class BinaryVersionHandler implements Handler {
 
     @Override
     public void handle(Context ctx) throws Exception {
-        logger.info("Received request for SDKMAN binary: {}", ctx.getPathTokens().get(VERSION_TYPE_TOKEN));
-        Optional.ofNullable(ctx.getPathTokens().get(VERSION_TYPE_TOKEN))
+        logger.info("Received request for SDKMAN binary: {}", ctx.getPathTokens().get(VERSION_TYPE_PATH_TOKEN));
+        Optional.ofNullable(ctx.getPathTokens().get(VERSION_TYPE_PATH_TOKEN))
                 .ifPresentOrElse(versionType ->
                                 appRepo.findVersion(versionType).then(version ->
                                         Optional.ofNullable(version)
