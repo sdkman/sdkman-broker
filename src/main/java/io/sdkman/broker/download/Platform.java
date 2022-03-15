@@ -17,7 +17,8 @@ public enum Platform {
     MAC_OSX(newArrayList("DarwinX64", "Darwin")),
     WINDOWS_32(newArrayList("WindowsX32", "MINGW32")),
     WINDOWS_64(newArrayList("WindowsX64", "CYGWIN", "MINGW64", "MSYS")),
-    SUN_OS(newArrayList("SunOS"));
+    SUN_OS(newArrayList("SunOS")),
+    EXOTIC(newArrayList("Exotic"));
 
     List<String> ids;
 
