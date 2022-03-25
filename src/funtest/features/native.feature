@@ -15,7 +15,7 @@ Feature: Native SDKMAN binaries
     | WindowsX64  | WINDOWS_64    | 0.1.0   | /download/native/install/0.1.0/cygwin_nt-6.1 | https://github.com/sdkman/sdkman-cli-native/releases/download/v0.1.0/sdkman-cli-native-0.1.0-x86_64-pc-windows-msvc.zip    |
 
   Scenario: Return a NOT_FOUND status for an unknown platform
-    When a download request is made on "/download/native/install/0.1.0/unknown"
+    When a download request is made on "/download/native/install/0.1.0/exotic"
     Then the service response status is 404
 
   Scenario: Return a NOT_FOUND status for a unsupported distribution
