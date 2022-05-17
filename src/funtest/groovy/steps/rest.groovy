@@ -3,6 +3,7 @@ package steps
 import wslite.rest.RESTClientException
 
 import static io.cucumber.groovy.EN.And
+import static io.sdkman.broker.download.CandidateDownloadHandler.X_SDKMAN_ARCHIVE_TYPE
 
 And(~/^a binary resource for SDKMAN "(.*)" is hosted at "(.*)"$/) { String name, String url ->
     //nothing to do
@@ -45,6 +46,11 @@ And(~/^a redirect to "(.*)" is returned/) { String url ->
 And(~/^a checksum "(.*)" for header "(.*)" is returned/) { String checksum, String checksumHeaderKey ->
     assert response.headers.containsKey(checksumHeaderKey)
     assert response.headers["${checksumHeaderKey}"] == checksum
+}
+
+And(~/^a header with archive type "(.*)" is returned/) { String archiveType ->
+    assert response.headers.containsKey(X_SDKMAN_ARCHIVE_TYPE)
+    assert response.headers[X_SDKMAN_ARCHIVE_TYPE] == archiveType
 }
 
 And(~/^the response is "(.*)"$/) { String txt ->

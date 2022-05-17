@@ -31,9 +31,9 @@ import scala.collection.JavaConverters;
 @Singleton
 public class CandidateDownloadHandler implements Handler {
 
+    private static final Logger logger = LoggerFactory.getLogger(CandidateDownloadHandler.class);
     private static final String COMMAND = "install";
     private static final String X_SDK_MAN_CHECKSUM = "X-Sdkman-Checksum";
-    private static final Logger logger = LoggerFactory.getLogger(CandidateDownloadHandler.class);
     private static final Comparator<String> algoComparator =
             Comparator.comparing((Function<String, Integer>) algorithm -> {
                 if (MD5.id().equals(algorithm)) {
@@ -53,6 +53,7 @@ public class CandidateDownloadHandler implements Handler {
                 }
             }).reversed();
 
+    public static final String X_SDKMAN_ARCHIVE_TYPE = "X-Sdkman-ArchiveType";
 
     private final VersionRepo versionRepo;
     private final AuditRepo auditRepo;
@@ -79,6 +80,8 @@ public class CandidateDownloadHandler implements Handler {
                                                         v.checksums().foreach(v1 ->
                                                                 writeChecksumHeaders(ctx, v1));
 
+                                                        ctx.header(X_SDKMAN_ARCHIVE_TYPE,
+                                                                ArchiveType.fromUrl(v.url()).type());
                                                         ctx.redirect(302, v.url());
                                                     }, clientError(ctx, 404))),
                             clientError(ctx, 400));

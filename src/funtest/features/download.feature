@@ -82,3 +82,23 @@ Feature: Download a Candidate Version
     When a download request is made on "/download/java/8u101/darwin"
     Then a redirect to "http://download.oracle.com/otn-pub/java/jdk/8u101-b13/jdk-8u101-macosx-x64.dmg" is returned
     And a checksum "MAC_OSXaa605037178b63a" for header "X-Sdkman-Checksum-SHA-1" is returned
+
+  Scenario: Download a Universal binary with a zip file
+    Given a valid UNIVERSAL binary for groovy 2.4.7 hosted at http://dl.bintray.com/groovy/maven/apache-groovy-binary-2.4.7.zip
+    When a download request is made on "/download/groovy/2.4.7/linuxx64"
+    Then a redirect to "http://dl.bintray.com/groovy/maven/apache-groovy-binary-2.4.7.zip" is returned
+    And a header with archive type "zip" is returned
+
+  Scenario: Download a Universal binary with a tarball file
+    Given a valid MAC_OSX binary for java 8u101 hosted at http://download.oracle.com/otn-pub/java/jdk/8u101-b13/jdk-8u101-macosx-x64.dmg
+    And a valid LINUX_64 binary for java 8u101 hosted at http://download.oracle.com/otn-pub/java/jdk/8u101-b13/jdk-8u101-linux-x64.tar.gz
+    When a download request is made on "/download/java/8u101/linuxx64"
+    Then a redirect to "http://download.oracle.com/otn-pub/java/jdk/8u101-b13/jdk-8u101-linux-x64.tar.gz" is returned
+    And a header with archive type "tar" is returned
+
+  Scenario: Download a Universal binary with a dmg file
+    Given a valid MAC_OSX binary for java 8u101 hosted at http://download.oracle.com/otn-pub/java/jdk/8u101-b13/jdk-8u101-macosx-x64.dmg
+    And a valid LINUX_64 binary for java 8u101 hosted at http://download.oracle.com/otn-pub/java/jdk/8u101-b13/jdk-8u101-linux-x64.tar.gz
+    When a download request is made on "/download/java/8u101/darwin"
+    Then a redirect to "http://download.oracle.com/otn-pub/java/jdk/8u101-b13/jdk-8u101-macosx-x64.dmg" is returned
+    And a header with archive type "dmg" is returned
