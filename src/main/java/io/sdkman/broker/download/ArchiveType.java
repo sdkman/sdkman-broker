@@ -7,8 +7,7 @@ import java.util.EnumSet;
  */
 public enum ArchiveType {
     ZIP("zip", "zip"),
-    TAR("tar", "tar.gz"),
-    DMG("dmg", "dmg");
+    TAR("tar", "tar.gz");
 
     private final String type;
     private final String extension;
