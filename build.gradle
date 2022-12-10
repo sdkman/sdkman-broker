@@ -22,8 +22,8 @@ repositories {
 }
 
 configurations {
-  funTestCompile.extendsFrom testCompile
-  funTestRuntime.extendsFrom testRuntime
+  funTestCompile.extendsFrom testImplementation
+  funTestRuntime.extendsFrom testRuntimeOnly
 }
 
 dependencies {
