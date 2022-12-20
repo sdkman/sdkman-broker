@@ -45,11 +45,19 @@ public class Main {
                         .bind(BinaryDownloadHandler.class)
                         .bind(NativeBinaryDownloadHandler.class)))
                 .handlers(chain -> chain
+                        //meta endpoints
                         .get("health/:name?", HealthCheckHandler.class)
                         .get("version", VersionHandler.class)
-                        .get("download/sdkman/version/:versionType", BinaryVersionHandler.class)
+
+                        //SDKMAN bash/native version by channel
+                        .get("download/sdkman/version/:channel", BinaryVersionHandler.class) //TODO: deprecated
+                        .get("version/sdkman/:impl/:channel", BinaryVersionHandler.class)
+
+                        //SDKMAN download bash/native
                         .get("download/sdkman/:command/:version/:platform", BinaryDownloadHandler.class)
                         .get("download/native/:command/:version/:platform", NativeBinaryDownloadHandler.class)
+
+                        //candidate + version (+ platform) download
                         .get("download/:candidate/:version/:platform", CandidateDownloadHandler.class)
                         .get("download/:candidate/:version", CandidateDownloadHandler.class)));
     }
