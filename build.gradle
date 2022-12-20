@@ -1,20 +1,10 @@
-buildscript {
-  repositories {
-    mavenCentral()
-    gradlePluginPortal()
-  }
-  dependencies {
-    classpath "io.ratpack:ratpack-gradle:1.8.0"
-    classpath "com.github.jengelman.gradle.plugins:shadow:5.2.0"
-    classpath "com.netflix.nebula:nebula-release-plugin:15.3.1"
-  }
+plugins {
+  id "groovy"
+  id "org.jetbrains.kotlin.jvm" version "1.7.21"
+  id "io.ratpack.ratpack-java" version "1.8.0"
+  id "com.github.johnrengelman.shadow" version "5.2.0"
+  id "nebula.release" version "15.3.1"
 }
-
-apply plugin: "io.ratpack.ratpack-java"
-apply plugin: "com.github.johnrengelman.shadow"
-apply plugin: "idea"
-apply plugin: "groovy"
-apply plugin: "nebula.release"
 
 repositories {
   mavenCentral()
