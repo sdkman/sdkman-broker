@@ -30,20 +30,28 @@ class MongoHelper {
         collection.insertOne(basicDbObject)
     }
 
-    static insertStableCliVersionInDb(MongoDatabase db, String version) {
+    private static insertApplicationField(MongoDatabase db, String field, String value) {
         def collection = db.getCollection("application", BasicDBObject)
         def basicDbObject = new BasicDBObject()
         basicDbObject.append("_id", id.getAndIncrement().toString())
-        basicDbObject.append("stableCliVersion", version)
+        basicDbObject.append(field, value)
         collection.insertOne(basicDbObject)
     }
 
+    static insertStableCliVersionInDb(MongoDatabase db, String version) {
+        insertApplicationField(db, "stableCliVersion", version)
+    }
+
+    static insertStableNativeVersionInDb(MongoDatabase db, String version) {
+        insertApplicationField(db, "stableNativeCliVersion", version)
+    }
+
     static insertBetaCliVersionInDb(MongoDatabase db, String version) {
-        def collection = db.getCollection("application", BasicDBObject)
-        def basicDbObject = new BasicDBObject()
-        basicDbObject.append("_id", id.getAndIncrement().toString())
-        basicDbObject.append("betaCliVersion", version)
-        collection.insertOne(basicDbObject)
+        insertApplicationField(db, "betaCliVersion", version)
+    }
+
+    static insertBetaNativeCliVersionInDb(MongoDatabase db, String version) {
+        insertApplicationField(db, "betaNativeCliVersion", version)
     }
 
     //{
