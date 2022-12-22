@@ -12,44 +12,29 @@ Feature: Resource
     Then a redirect to "https://github.com/sdkman/sdkman-cli/releases/download/latest/sdkman-cli-latest+abcdef.zip" is returned
     And an audit entry for sdkman latest+abcdef UNIVERSAL is recorded for DarwinX64
 
-  Scenario: Read the current Stable Bash SDKMAN binary resource version
-    Given the Stable Bash CLI version is "5.5.5"
-    When a GET request is made for "/version/sdkman/bash/stable"
+  Scenario Outline:
+    Given the <channel> <implementation> CLI version is <version>
+    When a GET request is made for "<url>"
     Then the service response status is 200
     And the content type is "text/plain"
-    And the response is "5.5.5"
-
-  Scenario: Read the current Stable Native SDKMAN binary resource version
-    Given the Stable Native CLI version is "1.0.0"
-    When a GET request is made for "/version/sdkman/native/stable"
-    Then the service response status is 200
-    And the content type is "text/plain"
-    And the response is "1.0.0"
-
-  Scenario: Read the current Beta Bash SDKMAN binary resource version
-    Given the Beta Bash CLI version is "latest+abcdef"
-    When a GET request is made for "/version/sdkman/bash/beta"
-    Then the service response status is 200
-    And the content type is "text/plain"
-    And the response is "latest+abcdef"
-
-  Scenario: Read the current Beta Native SDKMAN binary resource version
-    Given the Beta Native CLI version is "0.0.15"
-    When a GET request is made for "/version/sdkman/native/beta"
-    Then the service response status is 200
-    And the content type is "text/plain"
-    And the response is "0.0.15"
+    And the response is "<response>"
+    Examples:
+    |channel   | implementation  | version       | url                             | response       |
+    |stable    | bash            | 5.5.5         | /version/sdkman/bash/stable     | 5.5.5          |
+    |stable    | native          | 1.0.0         | /version/sdkman/native/stable   | 1.0.0          |
+    |beta      | bash            | latest+abcdef | /version/sdkman/bash/beta       | latest+abcdef  |
+    |beta      | native          | 0.1.0         | /version/sdkman/native/beta     | 0.1.0          |
 
 # TODO: Retire these legacy endpoints!!!
   Scenario: Read the legacy current Stable Bash SDKMAN binary resource version
-    Given the Stable Bash CLI version is "5.5.5"
+    Given the stable bash CLI version is 5.5.5
     When a GET request is made for "/download/sdkman/version/stable"
     Then the service response status is 200
     And the content type is "text/plain"
     And the response is "5.5.5"
 
   Scenario: Read the legacy current Beta Bash SDKMAN binary resource version
-    Given the Beta Bash CLI version is "latest+abcdef"
+    Given the beta bash CLI version is latest+abcdef
     When a GET request is made for "/download/sdkman/version/beta"
     Then the service response status is 200
     And the content type is "text/plain"
