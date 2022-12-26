@@ -47,11 +47,11 @@ And(~/^an audit entry for (.*) (.*) (.*) is not recorded for (.*)$/) { String ca
 
 And(~/^the (.*) (.*) CLI version is (.*)$/) { String channel, String implementation, String version ->
     if (channel == "stable" && implementation == "bash") {
-        insertStableCliVersionInDb(db, version)
+        insertStableBashCliVersionInDb(db, version)
     } else if (channel == "stable" && implementation == "native") {
-        insertStableNativeVersionInDb(db, version)
+        insertStableNativeCliVersionInDb(db, version)
     } else if (channel == "beta" && implementation == "bash") {
-        insertBetaCliVersionInDb(db, version)
+        insertBetaBashCliVersionInDb(db, version)
     } else if (channel == "beta" && implementation == "native") {
         insertBetaNativeCliVersionInDb(db, version)
     }
