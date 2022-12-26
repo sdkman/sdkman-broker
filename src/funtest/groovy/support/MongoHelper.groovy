@@ -38,15 +38,15 @@ class MongoHelper {
         collection.insertOne(basicDbObject)
     }
 
-    static insertStableCliVersionInDb(MongoDatabase db, String version) {
+    static insertStableBashCliVersionInDb(MongoDatabase db, String version) {
         insertApplicationField(db, "stableCliVersion", version)
     }
 
-    static insertStableNativeVersionInDb(MongoDatabase db, String version) {
+    static insertStableNativeCliVersionInDb(MongoDatabase db, String version) {
         insertApplicationField(db, "stableNativeCliVersion", version)
     }
 
-    static insertBetaCliVersionInDb(MongoDatabase db, String version) {
+    static insertBetaBashCliVersionInDb(MongoDatabase db, String version) {
         insertApplicationField(db, "betaCliVersion", version)
     }
 
