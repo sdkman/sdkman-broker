@@ -7,26 +7,27 @@ import ratpack.exec.Promise
 import javax.inject.Inject
 import javax.inject.Singleton
 
+const val APPLICATION_COLLECTION = "application"
+const val ALIVE_FIELD = "alive"
+const val ALIVE_VALUE = "OK"
+
 @Singleton
 open class AppRepo @Inject constructor(private val mongoProvider: MongoProvider) {
-
-    private val applicationCollectionName = "application"
-    private val aliveFieldName = "alive"
 
     fun healthCheck(): Promise<String?> =
         Blocking.get {
             mongoProvider.database()
-                .getCollection(applicationCollectionName)
-                .find(eq(aliveFieldName, "OK"))
+                .getCollection(APPLICATION_COLLECTION)
+                .find(eq(ALIVE_FIELD, ALIVE_VALUE))
                 .first()
-                .getString(aliveFieldName)
+                .getString(ALIVE_FIELD)
         }
 
     fun findVersion(impl: String, channel: String): Promise<String> =
         Blocking.get {
             mongoProvider
                 .database()
-                .getCollection(applicationCollectionName)
+                .getCollection(APPLICATION_COLLECTION)
                 .find()
                 .first()
                 .getString(cliVersionField(channel, impl))
