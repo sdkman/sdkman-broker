@@ -1,5 +1,7 @@
 package io.sdkman.broker.app
 
+import arrow.core.Option
+import arrow.core.toOption
 import com.mongodb.client.model.Filters.eq
 import io.sdkman.broker.db.MongoProvider
 import ratpack.exec.Blocking
@@ -14,23 +16,25 @@ const val ALIVE_VALUE = "OK"
 @Singleton
 open class AppRepo @Inject constructor(private val mongoProvider: MongoProvider) {
 
-    fun healthCheck(): Promise<String?> =
+    fun healthCheck(): Promise<Option<String>> =
         Blocking.get {
             mongoProvider.database()
                 .getCollection(APPLICATION_COLLECTION)
                 .find(eq(ALIVE_FIELD, ALIVE_VALUE))
                 .first()
-                .getString(ALIVE_FIELD)
+                .toOption()
+                .map { it.getString(ALIVE_FIELD) }
         }
 
-    fun findVersion(impl: String, channel: String): Promise<String> =
+    fun findVersion(impl: String, channel: String): Promise<Option<String>> =
         Blocking.get {
             mongoProvider
                 .database()
                 .getCollection(APPLICATION_COLLECTION)
                 .find()
                 .first()
-                .getString(cliVersionField(channel, impl))
+                .toOption()
+                .map { it.getString(cliVersionField(channel, impl)) }
         }
 
     private fun cliVersionField(channel: String, impl: String): String =
@@ -41,13 +45,10 @@ open class AppRepo @Inject constructor(private val mongoProvider: MongoProvider)
                     else -> "stableCliVersion"
                 }
 
-            "beta" ->
+            else ->
                 when (impl) {
                     "native" -> "betaNativeCliVersion"
                     else -> "betaCliVersion"
                 }
-
-            else -> ""
         }
-
 }

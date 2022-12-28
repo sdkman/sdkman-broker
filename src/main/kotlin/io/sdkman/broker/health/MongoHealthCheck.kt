@@ -1,5 +1,8 @@
 package io.sdkman.broker.health
 
+import arrow.core.None
+import arrow.core.Option
+import arrow.core.Some
 import io.sdkman.broker.app.AppRepo
 import ratpack.exec.Promise
 import ratpack.health.HealthCheck
@@ -16,10 +19,10 @@ class MongoHealthCheck @Inject constructor(private val appRepo: AppRepo) : Healt
     override fun getName(): String = "alive"
 
     override fun check(registry: Registry): Promise<Result> =
-        appRepo.healthCheck().map { os ->
+        appRepo.healthCheck().map { os: Option<String> ->
             when (os) {
-                null -> Result.unhealthy(UNHEALTHY_MESSAGE)
-                else -> Result.healthy()
+                is None -> Result.unhealthy(UNHEALTHY_MESSAGE)
+                is Some -> Result.healthy()
             }
         }
 }
