@@ -14,7 +14,7 @@ class BinaryVersionHandler @Inject constructor(private val appRepo: AppRepo) : H
             null -> ctx.clientError(400)
             channel -> {
                 val impl = ctx.pathTokens["impl"] ?: "bash"
-                appRepo.findVersion(impl, channel).then(ctx::render)
+                appRepo.findVersion(impl, channel).then { it.map(ctx::render) }
             }
         }
     }
