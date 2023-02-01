@@ -12,16 +12,16 @@ import ratpack.exec.Blocking;
 @Singleton
 public class AuditRepo {
 
-    private final static Logger LOG = LoggerFactory.getLogger(AuditRepo.class);
+    private static final Logger logger = LoggerFactory.getLogger(AuditRepo.class);
 
-    private MongoProvider mongoProvider;
+    private final MongoProvider mongoProvider;
 
     @Inject
     public AuditRepo(MongoProvider mongoProvider) {
         this.mongoProvider = mongoProvider;
     }
 
-    public void record(AuditEntry auditEntry) {
+    public void insertAudit(AuditEntry auditEntry) {
         Blocking.exec(() -> {
                     mongoProvider.database()
                             .getCollection("audit", BasicDBObject.class)
@@ -36,7 +36,7 @@ public class AuditRepo {
                                             .append("platform", auditEntry.getPlatform())
                                             .append("dist", auditEntry.getDist())
                                             .append("timestamp", auditEntry.getTimestamp()));
-                    LOG.debug("Logged: " + auditEntry);
+                    logger.debug("Logged: {}", auditEntry);
                 }
         );
     }

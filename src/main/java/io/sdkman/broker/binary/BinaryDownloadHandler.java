@@ -13,6 +13,8 @@ import javax.inject.Inject;
 public class BinaryDownloadHandler implements Handler {
 
     private static final Logger logger = LoggerFactory.getLogger(BinaryDownloadHandler.class);
+    private static final String CANDIDATE_TYPE = "sdkman";
+    private static final String DISTRIBUTION = "UNIVERSAL";
 
     private final BinaryDownloadConfig config;
     private final AuditRepo auditRepo;
@@ -26,13 +28,14 @@ public class BinaryDownloadHandler implements Handler {
     @Override
     public void handle(Context ctx) {
         RequestDetails.of(ctx).ifPresentOrElse(details -> {
-            logger.info("Received download request for: " + details);
-            record(details, inferPlatform(details.getPlatform()));
+            logger.info("Received download request for: {}", details);
+            auditRepo.insertAudit(AuditEntry.of(details, CANDIDATE_TYPE, inferPlatform(details.getPlatform()), DISTRIBUTION));
             if (details.getVersion().startsWith("latest")) {
                 ctx.redirect(String.format(prepareRemoteBinaryUrl(), "latest", details.getVersion()));
-            } else {
-                ctx.redirect(String.format(prepareRemoteBinaryUrl(), details.getVersion(), details.getVersion()));
+                return;
             }
+
+           ctx.redirect(String.format(prepareRemoteBinaryUrl(), details.getVersion(), details.getVersion()));
         }, () -> ctx.clientError(400));
     }
 
@@ -44,10 +47,4 @@ public class BinaryDownloadHandler implements Handler {
         return Platform.of(platform).map(Platform::id).orElse("not defined");
     }
 
-    private void record(RequestDetails details, String platform) {
-        auditRepo.record(
-                AuditEntry.of(
-                        details.getCommand(), "sdkman", details.getVersion(), details.getHost(),
-                        details.getAgent(), platform, "UNIVERSAL"));
-    }
 }

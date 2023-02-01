@@ -105,7 +105,7 @@ public class CandidateDownloadHandler implements Handler {
     }
 
     private void audit(RequestDetails details, String platform, String dist) {
-        auditRepo.record(
+        auditRepo.insertAudit(
                 AuditEntry.of(
                         COMMAND, details.getCandidate(), details.getVersion(), details.getHost(),
                         details.getAgent(), platform, dist));
