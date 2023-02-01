@@ -49,6 +49,7 @@ class PlatformSpec extends Specification {
         "MINGW32_NT-6.1"      | Platform.WINDOWS_32
         "MINGW32_NT-6.1-WOW"  | Platform.WINDOWS_32
         "MINGW32_NT-6.2"      | Platform.WINDOWS_32
+        "Exotic"              | Platform.EXOTIC
     }
 
     void "should resolve empty on no identifier"() {
