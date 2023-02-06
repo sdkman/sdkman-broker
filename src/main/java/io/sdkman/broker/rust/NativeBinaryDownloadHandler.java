@@ -18,6 +18,8 @@ public class NativeBinaryDownloadHandler implements Handler {
 
     private static final Logger logger = LoggerFactory.getLogger(NativeBinaryDownloadHandler.class);
 
+    private static final String CANDIDATE_TYPE = "sdkman_native";
+
     private final NativeBinaryDownloadConfig config;
     private final AuditRepo auditRepo;
 
@@ -30,11 +32,11 @@ public class NativeBinaryDownloadHandler implements Handler {
     @Override
     public void handle(Context ctx) throws Exception {
         RequestDetails.of(ctx).ifPresentOrElse(details -> {
-            logger.info("Received native download request for: " + details);
+            logger.info("Received native download request for: {}", details);
             String version = details.getVersion();
             Platform.of(details.getPlatform()).ifPresentOrElse(platform ->
                             NativeTarget.of(platform).ifPresentOrElse((target -> {
-                                        record(details, platform.id(), platform.name());
+                                        auditRepo.insertAudit(AuditEntry.of(details, CANDIDATE_TYPE, platform.id(), platform.name()));
                                         ctx.redirect(format(prepareRemoteBinaryUrl(), version, version, target.getTriple()));
                                     }),
                                     () -> ctx.clientError(404)),
@@ -44,9 +46,5 @@ public class NativeBinaryDownloadHandler implements Handler {
 
     private String prepareRemoteBinaryUrl() {
         return config.getProtocol() + "://" + config.getHost() + config.getUri() + config.getName();
-    }
-
-    private void record(RequestDetails details, String platform, String distribution) {
-        auditRepo.record(AuditEntry.of(details.getCommand(), "sdkman_native", details.getVersion(), details.getHost(), details.getAgent(), platform, distribution));
     }
 }

@@ -1,5 +1,7 @@
 package io.sdkman.broker.audit;
 
+import io.sdkman.broker.binary.RequestDetails;
+
 public class AuditEntry {
     private final String command;
     private final String candidate;
@@ -69,5 +71,13 @@ public class AuditEntry {
     public static AuditEntry of(String command, String candidate, String version,
                                 String host, String agent, String platform, String dist) {
         return new AuditEntry(command, candidate, version, host, agent, platform, dist);
+    }
+
+    public static AuditEntry of(RequestDetails details, String candidate, String platform, String distribution) {
+        if (details == null) {
+            throw new IllegalArgumentException("details must not be null");
+        }
+
+        return of(details.getCommand(), candidate, details.getVersion(), details.getHost(), details.getAgent(), platform, distribution);
     }
 }

@@ -10,13 +10,12 @@ import com.mongodb.client.MongoDatabase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Singleton
 public class MongoProvider {
 
-    private final static Logger LOG = LoggerFactory.getLogger(MongoProvider.class);
+    private static final Logger logger = LoggerFactory.getLogger(MongoProvider.class);
 
     private final MongoConfig mongoConfig;
     private final MongoClient mongoClient;
@@ -28,7 +27,7 @@ public class MongoProvider {
     }
 
     private MongoClient mongo() {
-        LOG.info("Initialising mongo client.");
+        logger.info("Initialising mongo client.");
         ServerAddress serverAddress = new ServerAddress(mongoConfig.getHost(), mongoConfig.getPort());
         MongoClientOptions clientOptions = MongoClientOptions.builder()
                 .serverSelectionTimeout(mongoConfig.getServerSelectionTimeout())
@@ -40,17 +39,14 @@ public class MongoProvider {
                     mongoConfig.getUsername(),
                     mongoConfig.getDbName(),
                     mongoConfig.getPassword().toCharArray());
-            List<MongoCredential> credentials = new ArrayList<MongoCredential>() {{
-                add(credential);
-            }};
 
-            return new MongoClient(serverAddress, credentials, clientOptions);
-        } else {
-            return new MongoClient(serverAddress, clientOptions);
+            return new MongoClient(serverAddress, List.of(credential), clientOptions);
         }
+
+         return new MongoClient(serverAddress, clientOptions);
     }
 
-    public MongoDatabase database() throws Exception {
+    public MongoDatabase database() {
         return mongoClient.getDatabase(mongoConfig.getDbName());
     }
 }
