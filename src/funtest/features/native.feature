@@ -10,6 +10,7 @@ Feature: Native SDKMAN binaries
     | platform    | distribution  | version | broker_uri                                   | resolved_url                                                                                                               |
     | DarwinX64   | MAC_OSX       | 0.1.0   | /download/native/install/0.1.0/darwinx64     | https://github.com/sdkman/sdkman-cli-native/releases/download/v0.1.0/sdkman-cli-native-0.1.0-x86_64-apple-darwin.zip       |
     | DarwinARM64 | MAC_ARM64     | 0.1.0   | /download/native/install/0.1.0/darwinarm64   | https://github.com/sdkman/sdkman-cli-native/releases/download/v0.1.0/sdkman-cli-native-0.1.0-aarch64-apple-darwin.zip      |
+    | LinuxX32    | LINUX_32      | 0.1.0   | /download/native/install/0.1.0/linuxx32      | https://github.com/sdkman/sdkman-cli-native/releases/download/v0.1.0/sdkman-cli-native-0.1.0-i686-unknown-linux-gnu.zip    |
     | LinuxX64    | LINUX_64      | 0.1.0   | /download/native/install/0.1.0/linuxx64      | https://github.com/sdkman/sdkman-cli-native/releases/download/v0.1.0/sdkman-cli-native-0.1.0-x86_64-unknown-linux-gnu.zip  |
     | LinuxARM64  | LINUX_ARM64   | 0.1.0   | /download/native/install/0.1.0/linuxarm64    | https://github.com/sdkman/sdkman-cli-native/releases/download/v0.1.0/sdkman-cli-native-0.1.0-aarch64-unknown-linux-gnu.zip |
     | WindowsX64  | WINDOWS_64    | 0.1.0   | /download/native/install/0.1.0/cygwin_nt-6.1 | https://github.com/sdkman/sdkman-cli-native/releases/download/v0.1.0/sdkman-cli-native-0.1.0-x86_64-pc-windows-msvc.zip    |

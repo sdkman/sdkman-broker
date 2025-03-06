@@ -5,6 +5,7 @@ import io.sdkman.broker.download.Platform;
 import java.util.Optional;
 
 public enum NativeTarget {
+    LINUX_32("i686-unknown-linux-gnu", Platform.LINUX_32),
     LINUX_64("x86_64-unknown-linux-gnu", Platform.LINUX_64),
     LINUX_ARM64("aarch64-unknown-linux-gnu", Platform.LINUX_ARM64),
     MAC_OSX("x86_64-apple-darwin", Platform.MAC_OSX),
@@ -21,6 +22,8 @@ public enum NativeTarget {
 
     public static Optional<NativeTarget> of(Platform platform) {
         switch (platform) {
+            case LINUX_32:
+                return Optional.of(LINUX_32);
             case LINUX_64:
                 return Optional.of(LINUX_64);
             case LINUX_ARM64:
