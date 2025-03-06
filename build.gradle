@@ -2,8 +2,8 @@ plugins {
   id "groovy"
   id "org.jetbrains.kotlin.jvm" version "1.7.21"
   id "io.ratpack.ratpack-java" version "1.9.0"
-  id "com.github.johnrengelman.shadow" version "5.2.0"
-  id "nebula.release" version "15.3.1"
+  id "com.github.johnrengelman.shadow" version "8.1.1"
+  id "com.netflix.nebula.release" version "19.0.10"
 }
 
 repositories {
