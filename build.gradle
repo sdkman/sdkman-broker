@@ -33,7 +33,7 @@ dependencies {
   funTestCompile ratpack.dependency("test")
   funTestCompile "io.cucumber:cucumber-junit:6.11.0"
   funTestCompile "io.cucumber:cucumber-groovy:6.10.4"
-  funTestCompile "com.github.groovy-wslite:groovy-wslite:1.1.2"
+  funTestCompile "com.github.groovy-wslite:groovy-wslite:1.1.3"
 }
 
 mainClassName = "io.sdkman.broker.Main"
